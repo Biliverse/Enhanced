@@ -1,0 +1,18 @@
+#!name = {{@package 'displayName'}} β
+#!desc = {{inline (@package 'description')}}
+#!openUrl = {{@package 'openUrl'}}
+#!author = {{@package 'contributors'}}
+#!homepage = {{@package 'homepage'}}
+#!icon = {{@package 'icon'}}
+#!category = {{@package 'organizationName'}}
+#!date = {{now "yyyy-MM-dd HH:mm:ss"}}
+#!version = {{@package 'version'}}
+
+#[rewrite_local]
+^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/resource\/show\/tab\/v2\? url script-response-body https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/response.dev.bundle.js
+^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/account\/mine(\/ipad)?\? url script-response-body https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/response.dev.bundle.js
+^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/region\/index\? url script-response-body https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/response.dev.bundle.js
+^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/channel\/region\/list\? url script-response-body https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/response.dev.bundle.js
+
+#[mitm]
+hostname = app.bilibili.com, app.biliapi.net
