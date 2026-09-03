@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import HonoWorkerAdapter from "../src/class/HonoWorkerAdapter.mjs";
+import { Request } from "../src/process/Request.mjs";
 import { Response } from "../src/process/Response.mjs";
 
 test("rewrites Pages and Workers paths to the original upstream host", () => {
@@ -44,4 +45,24 @@ test("returns an unchanged response when the matching feature is disabled", asyn
 	const result = await Response({ url: "https://app.bilibili.com/x/resource/show/tab/v2" }, response);
 	assert.equal(result, response);
 	assert.deepEqual(JSON.parse(result.body), { code: 0, message: "0", data: { sentinel: true } });
+});
+
+test("returns a fully local Tab response during request processing", async () => {
+	HonoWorkerAdapter.buildArgument({
+		url: "https://app.bilibili.com/x/resource/show/tab/v2",
+		headers: { "biliverse-args": "Home.Switch=true&LogLevel=OFF" },
+	});
+	const { $response } = await Request({ method: "GET", url: "https://app.bilibili.com/x/resource/show/tab/v2", headers: {} });
+	const body = JSON.parse($response.body);
+
+	assert.equal($response.status, undefined);
+	assert.deepEqual(
+		body.data.tab.map(item => item.id),
+		["live", "recommend", "hottopic", "bangumi", "anime", "film", "koreavtw"],
+	);
+	assert.deepEqual(
+		body.data.bottom.map(item => item.id),
+		["home", "dynamic", "ogv", "mall", "mine"],
+	);
+	assert.ok(body.data.tab.every(item => typeof item.id === "string"));
 });
