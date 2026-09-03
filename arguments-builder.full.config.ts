@@ -46,17 +46,17 @@ export const args: ArgumentItem[] = [
 	{
 		key: "Home.Tab",
 		name: "[首页] 标签页",
-		defaultValue: ["直播tab", "推荐tab", "hottopic", "bangumi", "anime", "film", "koreavtw"],
+		defaultValue: ["live", "recommend", "hottopic", "bangumi", "anime", "film", "koreavtw"],
 		type: "array",
 		boxJsType: "checkboxes",
 		description: "请选择启用的首页标签页，建议不超过7个。",
 		options: [
 			{
-				key: "直播tab",
+				key: "live",
 				label: "直播",
 			},
 			{
-				key: "推荐tab",
+				key: "recommend",
 				label: "推荐",
 			},
 			{
@@ -84,15 +84,15 @@ export const args: ArgumentItem[] = [
 				label: "游戏",
 			},
 			{
-				key: "mctab",
+				key: "minecraft",
 				label: "minecraft",
 			},
 			{
-				key: "dhtr",
+				key: "anime_fan",
 				label: "动画同人",
 			},
 			{
-				key: "gaoxiao",
+				key: "funny",
 				label: "搞笑",
 			},
 			{
@@ -100,7 +100,7 @@ export const args: ArgumentItem[] = [
 				label: "校园",
 			},
 			{
-				key: "kj",
+				key: "digital",
 				label: "数码",
 			},
 		],
@@ -108,17 +108,17 @@ export const args: ArgumentItem[] = [
 	{
 		key: "Home.Tab_default",
 		name: "[首页] 默认标签页",
-		defaultValue: "推荐tab",
+		defaultValue: "recommend",
 		type: "string",
 		boxJsType: "selects",
 		description: "请选择启动APP时默认展示的标签页，需选择已启用的标签页。",
 		options: [
 			{
-				key: "直播tab",
+				key: "live",
 				label: "直播",
 			},
 			{
-				key: "推荐tab",
+				key: "recommend",
 				label: "推荐",
 			},
 			{
@@ -146,15 +146,15 @@ export const args: ArgumentItem[] = [
 				label: "游戏",
 			},
 			{
-				key: "mctab",
+				key: "minecraft",
 				label: "minecraft",
 			},
 			{
-				key: "dhtr",
+				key: "anime_fan",
 				label: "动画同人",
 			},
 			{
-				key: "gaoxiao",
+				key: "funny",
 				label: "搞笑",
 			},
 			{
@@ -162,7 +162,7 @@ export const args: ArgumentItem[] = [
 				label: "校园",
 			},
 			{
-				key: "kj",
+				key: "digital",
 				label: "数码",
 			},
 		],
@@ -188,29 +188,47 @@ export const args: ArgumentItem[] = [
 	{
 		key: "Home.Top",
 		name: "[首页] 顶栏（右侧）按钮",
-		defaultValue: ["消息Top"],
+		defaultValue: ["messages"],
 		type: "array",
 		boxJsType: "checkboxes",
 		description: "请选择启用的顶栏（右侧）按钮。",
 		options: [
 			{
-				key: "游戏中心Top",
+				key: "game_center",
 				label: "游戏中心",
 			},
 			{
-				key: "会员购Top",
+				key: "mall",
 				label: "会员购",
 			},
 			{
-				key: "消息Top",
+				key: "messages",
 				label: "消息",
+			},
+		],
+	},
+	{
+		key: "Home.Top_more",
+		name: "[首页] 顶栏（更多）按钮",
+		defaultValue: ["categories", "search"],
+		type: "array",
+		boxJsType: "checkboxes",
+		description: "请选择启用的首页顶栏更多按钮。",
+		options: [
+			{
+				key: "categories",
+				label: "更多分区",
+			},
+			{
+				key: "search",
+				label: "搜索",
 			},
 		],
 	},
 	{
 		key: "Bottom",
 		name: "[底部] 导航栏按钮",
-		defaultValue: ["home", "dynamic", "ogv", "会员购Bottom", "我的Bottom"],
+		defaultValue: ["home", "dynamic", "ogv", "mall", "mine"],
 		type: "array",
 		boxJsType: "checkboxes",
 		description: "请选择启用的底部导航栏按钮，最多6个。",
@@ -220,7 +238,7 @@ export const args: ArgumentItem[] = [
 				label: "首页",
 			},
 			{
-				key: "频道Bottom",
+				key: "channel",
 				label: "频道",
 			},
 			{
@@ -236,15 +254,15 @@ export const args: ArgumentItem[] = [
 				label: "节目（港澳台）",
 			},
 			{
-				key: "会员购Bottom",
+				key: "mall",
 				label: "会员购",
 			},
 			{
-				key: "消息Bottom",
+				key: "messages",
 				label: "消息",
 			},
 			{
-				key: "我的Bottom",
+				key: "mine",
 				label: "我的",
 			},
 		],

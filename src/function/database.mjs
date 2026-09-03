@@ -4,12 +4,12 @@ export default {
 			Home: {
 				Switch: "true",
 				Top_left: "mine",
-				Top: ["消息Top"],
-				Top_more: [],
-				Tab: ["直播tab", "推荐tab", "hottopic", "bangumi", "anime", "film", "koreavtw"],
+				Top: ["messages"],
+				Top_more: ["categories", "search"],
+				Tab: ["live", "recommend", "hottopic", "bangumi", "anime", "film", "koreavtw"],
 				Tab_default: "bangumi",
 			},
-			Bottom: ["home", "dynamic", "ogv", "会员购Bottom", "我的Bottom"],
+			Bottom: ["home", "dynamic", "ogv", "mall", "mine"],
 			Mine: {
 				Switch: "true",
 				CreatorCenter: [],
@@ -65,87 +65,94 @@ export default {
 		},
 		Configs: {
 			Tab: {
+				config: {
+					no_login_avatar: "https://i0.hdslb.com/bfs/archive/689ed56f5b8b9bd26a90b20c52d464ebc0156185.png",
+					no_login_avatar_type: 0,
+					popup_style: 1,
+					search_entrance: 5,
+					tab_simplify: false,
+				},
 				tab: [
 					{
-						id: 2036,
+						id: "live",
 						name: "直播",
 						uri: "bilibili://live/home",
 						tab_id: "直播tab",
 					},
 					{
-						id: 2037,
+						id: "recommend",
 						name: "推荐",
 						uri: "bilibili://pegasus/promo",
 						tab_id: "推荐tab",
 					},
 					{
-						id: 780,
+						id: "hottopic",
 						name: "热门",
 						uri: "bilibili://pegasus/hottopic",
 						tab_id: "hottopic",
 					},
 					{
-						id: 545,
+						id: "bangumi",
 						name: "追番",
 						uri: "bilibili://pgc/home",
 						tab_id: "bangumi",
 					},
 					{
-						id: 774,
+						id: "anime",
 						name: "动画（港澳台）",
 						uri: "bilibili://following/home_activity_tab/6544",
 						tab_id: "anime",
 					},
 					{
-						id: 151,
+						id: "film",
 						name: "影视",
 						uri: "bilibili://pgc/cinema-tab",
 						tab_id: "film",
 					},
 					{
-						id: 801,
+						id: "koreavtw",
 						name: "韩综（港澳台）",
 						uri: "bilibili://following/home_activity_tab/95636",
 						tab_id: "koreavtw",
 					},
 					{
-						id: 861,
+						id: "game",
 						name: "游戏",
 						uri: "bilibili://pegasus/vertical/802",
 						tab_id: "game",
 					},
 					{
-						id: 843,
+						id: "minecraft",
 						name: "minecraft",
 						uri: "bilibili://pegasus/vertical/2485003",
 						tab_id: "mctab",
 					},
 					{
-						id: 1229,
+						id: "anime_fan",
 						name: "动画同人",
 						uri: "bilibili://pegasus/vertical/27555107",
 						tab_id: "dhtr",
 					},
 					{
-						id: 1405,
+						id: "funny",
 						name: "搞笑",
 						uri: "bilibili://pegasus/vertical/1833",
 						tab_id: "gaoxiao",
 					},
 					{
-						id: 2280,
+						id: "school",
 						name: "校园",
 						uri: "bilibili://campus/home_tab",
 						tab_id: "school",
 					},
 					{
-						id: 1716,
+						id: "digital",
 						name: "数码",
 						uri: "bilibili://pegasus/vertical/13807",
 						tab_id: "kj",
 					},
 					{
-						id: 136117,
+						id: "new_journey",
 						name: "新征程",
 						uri: "bilibili://following/home_activity_tab/136117",
 						tab_id: "165",
@@ -154,21 +161,21 @@ export default {
 				],
 				top: [
 					{
-						id: 222,
+						id: "game_center",
 						icon: "http://i0.hdslb.com/bfs/archive/734a3b610a953df398bbe6d787944514dcd94a46.png",
 						name: "游戏中心",
 						uri: "bilibili://game_center/home",
 						tab_id: "游戏中心Top",
 					},
 					{
-						id: 108,
+						id: "mall",
 						icon: "http://i0.hdslb.com/bfs/archive/9d1c0985b9d0e2da2c2f919cc2ee0e36ea41fd90.png",
 						name: "会员购",
-						uri: "bilibili://mall/home/",
+						uri: "bilibili://mall/home",
 						tab_id: "会员购Top",
 					},
 					{
-						id: 176,
+						id: "messages",
 						icon: "http://i0.hdslb.com/bfs/archive/d43047538e72c9ed8fd8e4e34415fbe3a4f632cb.png",
 						name: "消息",
 						uri: "bilibili://link/im_home",
@@ -177,7 +184,7 @@ export default {
 				],
 				bottom: [
 					{
-						id: 177,
+						id: "home",
 						icon: "http://i0.hdslb.com/bfs/archive/63d7ee88d471786c1af45af86e8cb7f607edf91b.png",
 						icon_selected: "http://i0.hdslb.com/bfs/archive/e5106aa688dc729e7f0eafcbb80317feb54a43bd.png",
 						name: "首页",
@@ -185,7 +192,7 @@ export default {
 						tab_id: "home",
 					},
 					{
-						id: 103,
+						id: "channel",
 						icon: "http://i0.hdslb.com/bfs/archive/b4f621f268c1f9eda501805135f132aa9498b0ba.png",
 						icon_selected: "http://i0.hdslb.com/bfs/archive/94539249e59621214f7dc1226cf38a2b8fe4c64f.png",
 						name: "频道",
@@ -193,7 +200,7 @@ export default {
 						tab_id: "频道Bottom",
 					},
 					{
-						id: 179,
+						id: "dynamic",
 						icon: "http://i0.hdslb.com/bfs/archive/86dfbe5fa32f11a8588b9ae0fccb77d3c27cedf6.png",
 						icon_selected: "http://i0.hdslb.com/bfs/archive/25b658e1f6b6da57eecba328556101dbdcb4b53f.png",
 						name: "动态",
@@ -201,32 +208,32 @@ export default {
 						tab_id: "dynamic",
 					},
 					{
-						id: 670,
+						id: "publish",
 						icon: "http://i0.hdslb.com/bfs/feed-admin/c25cabacb40e9df2ccf54c327350e1afc4ae2f8c.png",
 						name: "发布",
 						uri: "bilibili://uper/center_plus?relation_from=center_plus\u0026tab_index=2",
 						tab_id: "publish",
 						dialog_items: [
 							{
-								id: 617,
+								id: "live_streaming",
 								name: "开直播",
 								icon: "http://i0.hdslb.com/bfs/feed-admin/01f9b3f8ed61a4e59af693da9fcd38fc342ee7e5.png",
 								uri: "activity://liveStreaming/home?source_event=14",
 							},
 							{
-								id: 618,
+								id: "shoot",
 								name: "拍摄",
 								icon: "http://i0.hdslb.com/bfs/feed-admin/30636aa60e594550ec47422e3875b4345e7d6017.png",
 								uri: "bilibili://uper/user_center/add_archive/?from=1\u0026is_new_ui=1\u0026relation_from=center_plus",
 							},
 							{
-								id: 619,
+								id: "upload",
 								name: "上传",
 								icon: "http://i0.hdslb.com/bfs/feed-admin/55c3c112f4885adc6cce0b4b94149409fd1c147b.png",
 								uri: "bilibili://uper/user_center/add_archive/?from=0\u0026is_new_ui=1\u0026relation_from=center_plus",
 							},
 							{
-								id: 620,
+								id: "template",
 								name: "模板创作",
 								icon: "http://i0.hdslb.com/bfs/feed-admin/4e5188d8390754655dee0fdfd90c1088da3cdf90.png",
 								uri: "bilibili://uper/user_center/add_archive/?from=2\u0026is_new_ui=1\u0026relation_from=center_plus",
@@ -235,7 +242,7 @@ export default {
 						type: 3,
 					},
 					{
-						id: 884,
+						id: "ogv",
 						icon: "http://i0.hdslb.com/bfs/feed-admin/68b1625cef3a8315d6fe3fbfd2a8b06c905f323a.png",
 						icon_selected: "http://i0.hdslb.com/bfs/feed-admin/1903c6f1dc881ed4c459ab337767fd8436cda159.png",
 						name: "节目",
@@ -244,7 +251,7 @@ export default {
 						type: 4,
 					},
 					{
-						id: 242,
+						id: "mall",
 						icon: "http://i0.hdslb.com/bfs/archive/6090d5fa7ece2a94de839e7cce4f1e774dae7779.png",
 						icon_selected: "http://i0.hdslb.com/bfs/archive/eeaf83fb7157000776dd93f61702a049f56801d3.png",
 						name: "会员购",
@@ -252,7 +259,7 @@ export default {
 						tab_id: "会员购Bottom",
 					},
 					{
-						id: 105,
+						id: "messages",
 						icon: "http://i0.hdslb.com/bfs/archive/93dae0f0fb2c9887effb2840800d5b639be69351.png",
 						icon_selected: "http://i0.hdslb.com/bfs/archive/f96bfd9ffea2e51443aed44dba6d76b7b34891c8.png",
 						name: "消息",
@@ -260,7 +267,7 @@ export default {
 						tab_id: "消息Bottom",
 					},
 					{
-						id: 181,
+						id: "mine",
 						icon: "http://i0.hdslb.com/bfs/archive/4b0b2c49ffeb4f0c2e6a4cceebeef0aab1c53fe1.png",
 						icon_selected: "http://i0.hdslb.com/bfs/archive/a54a8009116cb896e64ef14dcf50e5cade401e00.png",
 						name: "我的",
@@ -270,16 +277,18 @@ export default {
 				],
 				top_more: [
 					{
-						id: 621,
+						id: "categories",
 						icon: "http://i0.hdslb.com/bfs/feed-admin/f95dfa31c793c857af6e7b65b5387a05f30d31ba.png",
 						name: "更多分区",
 						uri: "bilibili://main/top_category",
+						tab_id: "更多分区TopMore",
 					},
 					{
-						id: 922,
+						id: "search",
 						icon: "http://i0.hdslb.com/bfs/feed-admin/38beac42189ad4d838d20259a5b2cdfd302fef40.png",
 						name: "搜索",
 						uri: "bilibili://search",
+						tab_id: "搜索TopMore",
 					},
 				],
 				top_left: {
