@@ -20,9 +20,9 @@ http:
     - "app.biliapi.net"
   script:
     - match: ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/resource\/show\/tab\/v2\?
-      name: 📺 BiliBili.Enhanced.response
-      type: response
-      require-body: true
+      name: 📺 BiliBili.Enhanced.request
+      type: request
+      require-body: false
     - match: ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/account\/mine(\/ipad)?\?
       name: 📺 BiliBili.Enhanced.response
       type: response
@@ -37,6 +37,9 @@ http:
       require-body: true
 
 script-providers:
+  📺 BiliBili.Enhanced.request:
+    url: https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/request.bundle.js
+    interval: 86400
   📺 BiliBili.Enhanced.response:
     url: https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/response.bundle.js
     interval: 86400
