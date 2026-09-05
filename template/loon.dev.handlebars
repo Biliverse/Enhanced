@@ -14,6 +14,7 @@
 {{{arguments}}}
 
 [Script]
+http-request ^https:\/\/app\.bilibili\.com\/biliverse\/settings\/(?:api\/Enhanced(?:\?.*)?$|(?:\?.*)?$) requires-body=1, script-path=https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/request.dev.bundle.js, tag=📺 BiliBili.Enhanced.Settings, argument={{{scriptParams}}}
 http-request ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/resource\/show\/tab\/v2\? script-path=https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/request.dev.bundle.js, tag=📺 BiliBili.Enhanced.x.resource.show.tab.v2, argument={{{scriptParams}}}
 http-response ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/account\/mine(\/ipad)?\? requires-body=1, script-path=https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/response.dev.bundle.js, tag=📺 BiliBili.Enhanced.x.v2.account.mine, argument={{{scriptParams}}}
 http-response ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/region\/index\? requires-body=1, script-path=https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/response.dev.bundle.js, tag=📺 BiliBili.Enhanced.x.v2.region.index, argument={{{scriptParams}}}

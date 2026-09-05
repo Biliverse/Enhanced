@@ -1,3 +1,4 @@
+import { addSettingsEntry } from "../function/settingsEntry.mjs";
 import { URL } from "@nsnanocat/url";
 import { $app, Console } from "@nsnanocat/util";
 import database from "../function/database.mjs";
@@ -217,6 +218,7 @@ export async function Response($request, $response) {
 				case "api.biliapi.net":
 					break;
 			}
+			if (["app.bilibili.com", "app.biliapi.net"].includes(url.hostname) && ["/x/v2/account/mine", "/x/v2/account/mine/ipad"].includes(url.pathname) && body.code === 0 && body.data) addSettingsEntry(body.data, url.pathname.endsWith("/ipad"));
 			$response.body = JSON.stringify(body);
 			break;
 		case "application/protobuf":

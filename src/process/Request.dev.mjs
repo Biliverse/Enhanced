@@ -1,3 +1,4 @@
+import { settingsResponse } from "../function/settings.mjs";
 import { URL } from "@nsnanocat/url";
 import { Console } from "@nsnanocat/util";
 import database from "../function/database.mjs";
@@ -17,6 +18,8 @@ export async function Request($request) {
 	 */
 	const { Settings, Configs } = setENV("BiliBili", "Enhanced", database);
 	Console.logLevel = Settings.LogLevel;
+	$response = settingsResponse($request, Settings);
+	if ($response) return { $request, $response };
 	// 方法判断
 	switch ($request.method) {
 		case "GET":

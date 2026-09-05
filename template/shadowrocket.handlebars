@@ -9,6 +9,7 @@
 #!version = {{@package 'version'}}
 
 [Script]
+📺 BiliBili.Enhanced.Settings = type=http-request, pattern=^https:\/\/app\.bilibili\.com\/biliverse\/settings\/(?:api\/Enhanced(?:\?.*)?$|(?:\?.*)?$), requires-body=1, max-size=65536, script-path=https://github.com/Biliverse/Enhanced/releases/download/v{{@package, argument=
 BiliBili.Enhanced.x.resource.show.tab.v2 = type=http-request, pattern=^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/resource\/show\/tab\/v2\?, script-path=https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/request.bundle.js, argument=
 BiliBili.Enhanced.x.v2.account.mine = type=http-response, pattern=^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/account\/mine(\/ipad)?\?, requires-body=1, script-path=https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/response.bundle.js, argument=
 BiliBili.Enhanced.x.v2.region.index = type=http-response, pattern=^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/region\/index\?, requires-body=1, script-path=https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/response.bundle.js, argument=

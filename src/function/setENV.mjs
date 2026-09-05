@@ -1,5 +1,5 @@
 import getStorage from "@nsnanocat/util/getStorage.mjs";
-import { Console, Lodash as _ } from "@nsnanocat/util";
+import { Console, Storage, Lodash as _ } from "@nsnanocat/util";
 
 /**
  * Set Environment Variables
@@ -11,7 +11,10 @@ import { Console, Lodash as _ } from "@nsnanocat/util";
  */
 export default function setENV(name, platforms, database) {
 	Console.log("☑️ Set Environment Variables");
+	const argumentStorage = globalThis.$argument.Storage;
+	globalThis.$argument.Storage = Storage.getItem(`@${name}.${platforms}.Settings`, {}).Storage ?? argumentStorage;
 	const { Settings, Caches, Configs } = getStorage(name, platforms, database);
+	globalThis.$argument.Storage = argumentStorage;
 	/***************** Settings *****************/
 	// 单值或空值转换为数组
 	if (!Array.isArray(Settings?.Home?.Top)) _.set(Settings, "Home.Top", Settings?.Home?.Top ? [Settings.Home.Top] : []);

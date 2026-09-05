@@ -19,6 +19,10 @@ http:
     - "app.bilibili.com"
     - "app.biliapi.net"
   script:
+    - match: ^https:\/\/app\.bilibili\.com\/biliverse\/settings\/(?:api\/Enhanced(?:\?.*)?$|(?:\?.*)?$)
+      name: 📺 BiliBili.Enhanced.request.dev
+      type: request
+      require-body: true
     - match: ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/resource\/show\/tab\/v2\?
       name: 📺 BiliBili.Enhanced.request.dev
       type: request

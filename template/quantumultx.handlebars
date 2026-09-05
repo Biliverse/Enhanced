@@ -9,6 +9,8 @@
 #!version = {{@package 'version'}}
 
 #[rewrite_local]
+# Biliverse 本地设置
+^https:\/\/app\.bilibili\.com\/biliverse\/settings\/(?:api\/Enhanced(?:\?.*)?$|(?:\?.*)?$) url script-echo-response 'version'}}/request.bundle.js
 # 📺 BiliBili.Enhanced.x.resource.show.tab.v2
 ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/resource\/show\/tab\/v2\? url script-echo-response https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/request.bundle.js
 # 📺 BiliBili.Enhanced.x.v2.account.mine

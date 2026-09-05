@@ -14,6 +14,7 @@
 {{{arguments}}}
 
 [Script]
+http-request ^https:\/\/app\.bilibili\.com\/biliverse\/settings\/(?:api\/Enhanced(?:\?.*)?$|(?:\?.*)?$) requires-body=1, script-path=https://github.com/Biliverse/Enhanced/releases/download/v{{@package, tag=📺 BiliBili.Enhanced.Settings, argument={{{scriptParams}}}
 http-request ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/resource\/show\/tab\/v2\? script-path=https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/request.bundle.js, tag=📺 BiliBili.Enhanced.x.resource.show.tab.v2, argument={{{scriptParams}}}
 http-response ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/account\/mine(\/ipad)?\? requires-body=1, script-path=https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/response.bundle.js, tag=📺 BiliBili.Enhanced.x.v2.account.mine, argument={{{scriptParams}}}
 http-response ^https?:\/\/app\.bili(bili\.com|api\.net)\/x\/v2\/region\/index\? requires-body=1, script-path=https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/response.bundle.js, tag=📺 BiliBili.Enhanced.x.v2.region.index, argument={{{scriptParams}}}
