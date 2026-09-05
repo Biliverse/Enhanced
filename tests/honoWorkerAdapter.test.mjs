@@ -56,6 +56,9 @@ test("returns a fully local Tab response during request processing", async () =>
 	const body = JSON.parse($response.body);
 
 	assert.equal($response.status, undefined);
+	assert.equal(body.config.popup_style, 1);
+	assert.equal(body.config.search_entrance, 5);
+	assert.equal(body.config.tab_simplify, false);
 	assert.deepEqual(
 		body.data.tab.map(item => item.id),
 		["live", "recommend", "hottopic", "bangumi", "anime", "film", "koreavtw"],
