@@ -1,4 +1,4 @@
-const uri = "https://app.bilibili.com/biliverse/settings/";
+const uri = "https://biliverse.github.io/settings/";
 
 export function addSettingsEntry(data, ipad = false) {
 	const groups = ipad
