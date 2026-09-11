@@ -21,7 +21,7 @@ export async function Response($request, $response) {
 	 * 设置
 	 * @type {{Settings: import('../types').Settings}}
 	 */
-	const { Settings, Caches, Configs } = setENV("BiliBili", "Enhanced", database);
+	const { Settings, Configs } = setENV("BiliBili", "Enhanced", database);
 	Console.logLevel = Settings.LogLevel;
 	// 创建空数据
 	let body = { code: 0, message: "0", data: {} };
@@ -92,8 +92,7 @@ export async function Response($request, $response) {
 									return e;
 								});
 							// 标签栏
-							if (!Caches.Tab) saveShortcutCache(Caches, getDefaultShortcutIds(Configs));
-							body.data.tab = buildTabs(Caches.Tab, Configs.RegionList, Settings.Home.Tab_default);
+							body.data.tab = buildTabs(Settings.Home.Tab, Configs.RegionList, Settings.Home.Tab_default);
 							// 底部导航栏
 							body.data.bottom = Configs.Tab.bottom
 								.map(e => {
@@ -241,25 +240,22 @@ export async function Response($request, $response) {
 									body = RegionListReply.fromBinary(rawBody);
 									body.contents = mergeRegionList(body.contents, Configs.RegionList);
 									const serverIds = body.shortcut?.icons.map(icon => icon.uniqueId) ?? [];
-									const shortcutIds = serverIds.length ? serverIds : (Caches.Tab ?? getDefaultShortcutIds(Configs));
+									const shortcutIds = serverIds.length ? serverIds : Settings.Home.Tab;
 									const shortcutIcons = getRegionIcons(shortcutIds, body.contents);
 									body.shortcut = { title: body.shortcut?.title ?? "快捷访问", icons: shortcutIcons };
-									saveShortcutCache(
-										Caches,
-										shortcutIcons.map(icon => icon.uniqueId),
-									);
+									if (serverIds.length) {
+										Settings.Home.Tab = serverIds;
+										Storage.setItem("@BiliBili.Enhanced.Settings", Settings);
+									}
 									rawBody = RegionListReply.toBinary(body);
 									break;
 								}
 								case "/bilibili.app.show.v1.Mixture/RegionShortcut": {
 									// 保存快捷访问
-									const requestBody = $request.body instanceof ArrayBuffer ? new Uint8Array($request.body) : ($request.body ?? new Uint8Array());
+									const requestBody = $app === "Quantumult X" ? new Uint8Array($request.bodyBytes ?? []) : $request.body instanceof ArrayBuffer ? new Uint8Array($request.body) : ($request.body ?? new Uint8Array());
 									const request = RegionShortcutReq.fromBinary(gRPC.decode(requestBody));
-									const shortcutIds = request.uniqueId.length ? request.uniqueId : getDefaultShortcutIds(Configs);
-									saveShortcutCache(
-										Caches,
-										shortcutIds.filter(uniqueId => Configs.RegionList.items[uniqueId]),
-									);
+									Settings.Home.Tab = request.uniqueId;
+									Storage.setItem("@BiliBili.Enhanced.Settings", Settings);
 									break;
 								}
 							}
@@ -295,10 +291,6 @@ function mergeRegionList(onlineContents, localRegionList) {
 	return [...localRegionList.groups.map(group => groups.get(group.title)), ...contents.filter(content => !configuredTitles.has(content.title))];
 }
 
-function getDefaultShortcutIds(configs) {
-	return configs.RegionList.defaultShortcut;
-}
-
 function getRegionIcons(uniqueIds, contents) {
 	return uniqueIds
 		.map(uniqueId => {
@@ -308,11 +300,6 @@ function getRegionIcons(uniqueIds, contents) {
 			}
 		})
 		.filter(Boolean);
-}
-
-function saveShortcutCache(caches, uniqueIds) {
-	caches.Tab = uniqueIds;
-	Storage.setItem("@BiliBili.Enhanced.Caches", caches);
 }
 
 function buildTabs(uniqueIds, regionList, defaultTab) {

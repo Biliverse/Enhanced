@@ -43,7 +43,8 @@ test("Default settings reference configured page IDs", () => {
 		bottom: new Set(Configs.Tab.bottom.map(item => item.id)),
 	};
 
-	for (const uniqueId of Configs.RegionList.defaultShortcut) assert.ok(Configs.RegionList.items[uniqueId]);
+	for (const uniqueId of Settings.Home.Tab) assert.ok(Configs.RegionList.items[uniqueId]);
+	assert.deepEqual(Settings.Home.Tab, Configs.RegionList.defaultShortcut);
 	for (const id of Settings.Home.Top) assert.ok(ids.top.has(id));
 	for (const id of Settings.Home.Top_more) assert.ok(ids.top_more.has(id));
 	for (const id of Settings.Bottom) assert.ok(ids.bottom.has(id));
@@ -90,6 +91,7 @@ test("RegionShortcut uses request and response scripts while RegionList stays re
 		assert.match(responseBlock, /response/, `${template} must use the response script`);
 		assert.match(requestBlock, /request/, `${template} must use the request script for RegionShortcut`);
 		assert.match(template.startsWith("stash") ? content : requestBlock, /request(\.dev)?\.bundle/, `${template} must reference the Enhanced request bundle`);
+		assert.match(requestBlock, /\(grpc\|app\)/, `${template} must intercept both RegionShortcut hosts`);
 		assert.ok(!lines.some(line => line.includes("Mixture") && line.includes("RegionList$") && !line.includes("(RegionList|RegionShortcut)")), `${template} must not intercept RegionList requests`);
 		assert.match(content, /grpc\.biliapi\.net/);
 	}

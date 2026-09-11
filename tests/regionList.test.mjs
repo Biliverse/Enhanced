@@ -39,7 +39,7 @@ test("RegionList config contains the captured entries and every custom tab", () 
 		assert.equal(typeof item.tab_id, "string");
 		assert.ok(!("tab" in item));
 	}
-	assert.deepEqual(RegionList.defaultShortcut, ["2036", "2037", "780", "545", "774", "151", "801"]);
+	assert.deepEqual(database.Enhanced.Settings.Home.Tab, RegionList.defaultShortcut);
 	assert.equal(RegionList.items["774"].title, "动画（港澳台）");
 	assert.equal(RegionList.items["801"].title, "韩综（港澳台）");
 	assert.deepEqual({ title: RegionList.items["884"].title, url: RegionList.items["884"].url, tab_id: RegionList.items["884"].tab_id }, { title: "节目", url: "bilibili://following/home_bottom_tab_activity_tab/168312", tab_id: "ogv" });
@@ -85,26 +85,53 @@ test("empty RegionList shortcut uses the Enhanced default tabs", async () => {
 	const response = await runRegionList(RegionListReply.create({ contents: [] }));
 	const result = RegionListReply.fromBinary(gRPC.decode(response.body));
 	const shortcutIds = result.shortcut.icons.map(icon => icon.uniqueId);
-	const caches = Storage.getItem("@BiliBili.Enhanced.Caches", {});
 
 	assert.deepEqual(shortcutIds, ["2036", "2037", "780", "545", "774", "151", "801"]);
-	assert.deepEqual(caches.Tab, shortcutIds);
-	assert.ok(!("RegionList" in caches));
+	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}), {});
 });
 
-test("RegionShortcut request updates the cached order before the server responds", async () => {
+test("RegionShortcut request updates the hidden Tab setting before the server responds", async () => {
 	const { $response } = await Request({
 		method: "POST",
-		url: "https://app.bilibili.com/bilibili.app.show.v1.Mixture/RegionShortcut",
+		url: "https://grpc.biliapi.net/bilibili.app.show.v1.Mixture/RegionShortcut",
 		headers: { "Content-Type": "application/grpc" },
-		body: gRPC.encode(RegionShortcutReq.toBinary({ uniqueId: ["801", "774", "65552"] })),
+		body: gRPC.encode(RegionShortcutReq.toBinary({ uniqueId: ["801", "999999", "774", "65552"] })),
 	});
 
 	assert.equal($response, undefined);
-	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Caches", {}).Tab, ["801", "774", "65552"]);
+	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, ["801", "999999", "774", "65552"]);
+	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Caches", {}), {});
 });
 
-test("RegionShortcut updates the cached order used to build home tabs", async () => {
+test("empty RegionShortcut request remains empty", async () => {
+	await Request({
+		method: "POST",
+		url: "https://app.bilibili.com/bilibili.app.show.v1.Mixture/RegionShortcut",
+		headers: { "Content-Type": "application/grpc" },
+		body: gRPC.encode(RegionShortcutReq.toBinary({ uniqueId: [] })),
+	});
+
+	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, []);
+});
+
+test("RegionShortcut clear sentinel keeps shortcuts and home tabs empty", async () => {
+	await Request({
+		method: "POST",
+		url: "https://grpc.biliapi.net/bilibili.app.show.v1.Mixture/RegionShortcut",
+		headers: { "Content-Type": "application/grpc" },
+		body: gRPC.encode(RegionShortcutReq.toBinary({ uniqueId: ["0"] })),
+	});
+	const regionListResponse = await runRegionList(RegionListReply.create({ contents: [] }));
+	const regionList = RegionListReply.fromBinary(gRPC.decode(regionListResponse.body));
+	const homeResponse = await Response({ url: "https://app.bilibili.com/x/resource/show/tab/v2", headers: {} }, { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: 0, data: {} }) });
+	const tabs = JSON.parse(homeResponse.body).data.tab;
+
+	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, ["0"]);
+	assert.deepEqual(regionList.shortcut.icons, []);
+	assert.deepEqual(tabs, []);
+});
+
+test("RegionShortcut updates the Tab setting used to build home tabs", async () => {
 	await runRegionList(RegionListReply.create({ contents: [] }));
 	await Response(
 		{
@@ -120,7 +147,8 @@ test("RegionShortcut updates the cached order used to build home tabs", async ()
 	const response = await Response({ url: "https://app.bilibili.com/x/resource/show/tab/v2", headers: {} }, { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: 0, data: {} }) });
 	const tabs = JSON.parse(response.body).data.tab;
 
-	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Caches", {}).Tab, ["1028", "884", "801", "774", "65552"]);
+	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, ["1028", "884", "801", "774", "65552"]);
+	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Caches", {}), {});
 	assert.deepEqual(
 		tabs.map(tab => tab.id),
 		[1028, 884, 801, 774, 65552],
