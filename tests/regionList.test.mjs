@@ -30,7 +30,7 @@ test("RegionList config contains the captured entries and every custom tab", () 
 		["推荐分区/服务", "港澳台分区/服务", "全部分区"],
 	);
 	assert.deepEqual(RegionList.groups.find(group => group.title === "港澳台分区/服务").ids, ["774", "801", "884", "1028"]);
-	assert.equal(regionIds.length, 62);
+	assert.equal(regionIds.length, 57);
 	assert.equal(uniqueIds.size, regionIds.length);
 	assert.equal(Object.keys(RegionList.items).length, regionIds.length);
 	for (const uniqueId of regionIds) {
@@ -72,7 +72,7 @@ test("RegionList response keeps online entries and applies the configured sectio
 		result.contents.map(content => content.title),
 		["推荐分区/服务", "港澳台分区/服务", "全部分区"],
 	);
-	assert.equal(icons.length, 62);
+	assert.equal(icons.length, 57);
 	assert.equal(icons.filter(icon => icon.uniqueId === "13").length, 1);
 	assert.equal(icons.find(icon => icon.uniqueId === "13").url, "bilibili://online");
 	assert.ok(icons.some(icon => icon.uniqueId === "774" && icon.title === "动画（港澳台）"));

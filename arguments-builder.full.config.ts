@@ -80,28 +80,8 @@ export const args: ArgumentItem[] = [
 				label: "韩综（港澳台）",
 			},
 			{
-				key: "861",
-				label: "游戏",
-			},
-			{
-				key: "843",
-				label: "minecraft",
-			},
-			{
-				key: "1229",
-				label: "动画同人",
-			},
-			{
-				key: "1405",
-				label: "搞笑",
-			},
-			{
 				key: "2280",
 				label: "校园",
-			},
-			{
-				key: "1716",
-				label: "数码",
 			},
 		],
 	},

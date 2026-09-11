@@ -69,7 +69,7 @@ export default {
 				groups: [
 					{
 						title: "推荐分区/服务",
-						ids: ["65552", "65563", "65549", "65551", "65539", "65550", "65555", "65560", "65541", "65565", "2036", "2037", "780", "545", "151", "861", "843", "1229", "1405", "2280", "1716", "136117"],
+						ids: ["65552", "65563", "65549", "65551", "65539", "65550", "65555", "65560", "65541", "65565", "2036", "2037", "780", "545", "151", "2280", "136117"],
 					},
 					{
 						title: "港澳台分区/服务",
@@ -466,47 +466,12 @@ export default {
 						rid: "1028",
 						tab_id: "1028",
 					},
-					861: {
-						img: "https://github.com/Biliverse/Enhanced/raw/main/src/assets/icon_rounded.png",
-						title: "游戏",
-						url: "bilibili://pegasus/vertical/802",
-						rid: "861",
-						tab_id: "game",
-					},
-					843: {
-						img: "https://github.com/Biliverse/Enhanced/raw/main/src/assets/icon_rounded.png",
-						title: "minecraft",
-						url: "bilibili://pegasus/vertical/2485003",
-						rid: "843",
-						tab_id: "mctab",
-					},
-					1229: {
-						img: "https://github.com/Biliverse/Enhanced/raw/main/src/assets/icon_rounded.png",
-						title: "动画同人",
-						url: "bilibili://pegasus/vertical/27555107",
-						rid: "1229",
-						tab_id: "dhtr",
-					},
-					1405: {
-						img: "https://github.com/Biliverse/Enhanced/raw/main/src/assets/icon_rounded.png",
-						title: "搞笑",
-						url: "bilibili://pegasus/vertical/1833",
-						rid: "1405",
-						tab_id: "gaoxiao",
-					},
 					2280: {
 						img: "https://github.com/Biliverse/Enhanced/raw/main/src/assets/icon_rounded.png",
 						title: "校园",
 						url: "bilibili://campus/home_tab",
 						rid: "2280",
 						tab_id: "school",
-					},
-					1716: {
-						img: "https://github.com/Biliverse/Enhanced/raw/main/src/assets/icon_rounded.png",
-						title: "数码",
-						url: "bilibili://pegasus/vertical/13807",
-						rid: "1716",
-						tab_id: "kj",
 					},
 					136117: {
 						img: "https://github.com/Biliverse/Enhanced/raw/main/src/assets/icon_rounded.png",
