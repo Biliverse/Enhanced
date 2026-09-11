@@ -6,6 +6,7 @@ export default {
 				Top_left: "mine",
 				Top: ["messages"],
 				Top_more: ["categories", "search"],
+				Tab: ["2036", "2037", "780", "545", "774", "151", "801"],
 				Tab_default: "545",
 			},
 			Bottom: ["home", "dynamic", "ogv", "mall", "mine"],
