@@ -61,7 +61,7 @@ test("returns a fully local Tab response during request processing", async () =>
 	assert.equal(body.config.tab_simplify, false);
 	assert.deepEqual(
 		body.data.tab.map(item => item.id),
-		[2036, 2037, 780, 545, 774, 151, 801],
+		[2036, 2037, 780, 545, 151],
 	);
 	assert.deepEqual(
 		body.data.bottom.map(item => item.id),

@@ -30,7 +30,7 @@ test("RegionList config contains the captured entries and every custom tab", () 
 		["默认标签页", "推荐分区/服务", "港澳台分区/服务", "全部分区"],
 	);
 	assert.deepEqual(RegionList.groups.find(group => group.title === "默认标签页").ids, RegionList.defaultShortcut);
-	assert.deepEqual(RegionList.groups.find(group => group.title === "港澳台分区/服务").ids, ["884", "1028"]);
+	assert.deepEqual(RegionList.groups.find(group => group.title === "港澳台分区/服务").ids, ["774", "801", "884", "1028"]);
 	assert.equal(regionIds.length, 57);
 	assert.equal(uniqueIds.size, regionIds.length);
 	assert.equal(Object.keys(RegionList.items).length, regionIds.length);
@@ -86,9 +86,8 @@ test("RegionList response keeps online entries and applies the configured sectio
 	assert.ok(icons.some(icon => icon.uniqueId === "1028" && icon.title === "我的NFT"));
 	assert.deepEqual(
 		result.shortcut.icons.map(icon => icon.uniqueId),
-		["2036", "2037", "780", "545", "774", "151", "801"],
+		["2036", "2037", "780", "545", "151"],
 	);
-	assert.equal(result.shortcut.icons.find(icon => icon.uniqueId === "774").title, "动画（港澳台）");
 });
 
 test("empty RegionList shortcut uses the Enhanced default tabs", async () => {
@@ -96,7 +95,7 @@ test("empty RegionList shortcut uses the Enhanced default tabs", async () => {
 	const result = RegionListReply.fromBinary(gRPC.decode(response.body));
 	const shortcutIds = result.shortcut.icons.map(icon => icon.uniqueId);
 
-	assert.deepEqual(shortcutIds, ["2036", "2037", "780", "545", "774", "151", "801"]);
+	assert.deepEqual(shortcutIds, ["2036", "2037", "780", "545", "151"]);
 	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}), {});
 });
 

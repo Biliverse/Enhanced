@@ -6,7 +6,7 @@ export default {
 				Top_left: "mine",
 				Top: ["messages"],
 				Top_more: ["categories", "search"],
-				Tab: ["2036", "2037", "780", "545", "774", "151", "801"],
+				Tab: ["2036", "2037", "780", "545", "151"],
 				Tab_default: "545",
 			},
 			Bottom: ["home", "dynamic", "ogv", "mall", "mine"],
@@ -65,11 +65,11 @@ export default {
 		},
 		Configs: {
 			RegionList: {
-				defaultShortcut: ["2036", "2037", "780", "545", "774", "151", "801"],
+				defaultShortcut: ["2036", "2037", "780", "545", "151"],
 				groups: [
 					{
 						title: "默认标签页",
-						ids: ["2036", "2037", "780", "545", "774", "151", "801"],
+						ids: ["2036", "2037", "780", "545", "151"],
 					},
 					{
 						title: "推荐分区/服务",
@@ -77,7 +77,7 @@ export default {
 					},
 					{
 						title: "港澳台分区/服务",
-						ids: ["884", "1028"],
+						ids: ["774", "801", "884", "1028"],
 					},
 					{
 						title: "全部分区",
