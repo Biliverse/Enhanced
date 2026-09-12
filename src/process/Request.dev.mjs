@@ -36,6 +36,10 @@ export async function Request($request) {
 							const request = RegionShortcutReq.fromBinary(gRPC.decode(rawBody));
 							Settings.Home.Tab = request.uniqueId;
 							Storage.setItem("@BiliBili.Enhanced.Settings", Settings);
+							$response = {
+								headers: { "Content-Type": "application/grpc" },
+								body: gRPC.encode(),
+							};
 							break;
 						}
 						case "/x/resource/show/tab/v2": {

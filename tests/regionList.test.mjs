@@ -48,6 +48,10 @@ test("RegionList config contains the captured entries and every custom tab", () 
 
 test("RegionList response keeps online entries and applies the configured section order", async () => {
 	const online = RegionListReply.create({
+		shortcut: {
+			title: "快捷访问",
+			icons: [{ img: "online.png", title: "线上快捷访问", url: "bilibili://online", uniqueId: "774", rid: "774" }],
+		},
 		contents: [
 			{
 				title: "全部分区",
@@ -79,6 +83,11 @@ test("RegionList response keeps online entries and applies the configured sectio
 	assert.ok(icons.some(icon => icon.uniqueId === "801" && icon.title === "韩综（港澳台）"));
 	assert.ok(icons.some(icon => icon.uniqueId === "884" && icon.title === "节目"));
 	assert.ok(icons.some(icon => icon.uniqueId === "1028" && icon.title === "我的NFT"));
+	assert.deepEqual(
+		result.shortcut.icons.map(icon => icon.uniqueId),
+		["2036", "2037", "780", "545", "774", "151", "801"],
+	);
+	assert.equal(result.shortcut.icons.find(icon => icon.uniqueId === "774").title, "动画（港澳台）");
 });
 
 test("empty RegionList shortcut uses the Enhanced default tabs", async () => {
@@ -90,7 +99,7 @@ test("empty RegionList shortcut uses the Enhanced default tabs", async () => {
 	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}), {});
 });
 
-test("RegionShortcut request updates the hidden Tab setting before the server responds", async () => {
+test("RegionShortcut request is consumed locally and returns an empty gRPC response", async () => {
 	const { $response } = await Request({
 		method: "POST",
 		url: "https://grpc.biliapi.net/bilibili.app.show.v1.Mixture/RegionShortcut",
@@ -98,7 +107,8 @@ test("RegionShortcut request updates the hidden Tab setting before the server re
 		body: gRPC.encode(RegionShortcutReq.toBinary({ uniqueId: ["801", "999999", "774", "65552"] })),
 	});
 
-	assert.equal($response, undefined);
+	assert.deepEqual($response.headers, { "Content-Type": "application/grpc" });
+	assert.deepEqual(gRPC.decode($response.body), new Uint8Array());
 	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, ["801", "999999", "774", "65552"]);
 	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Caches", {}), {});
 });
@@ -131,24 +141,24 @@ test("RegionShortcut clear sentinel keeps shortcuts and home tabs empty", async 
 	assert.deepEqual(tabs, []);
 });
 
-test("RegionShortcut updates the Tab setting used to build home tabs", async () => {
-	await runRegionList(RegionListReply.create({ contents: [] }));
-	await Response(
-		{
-			url: "https://app.bilibili.com/bilibili.app.show.v1.Mixture/RegionShortcut",
-			headers: { "User-Agent": "bili-inter/1" },
-			body: gRPC.encode(RegionShortcutReq.toBinary({ uniqueId: ["1028", "884", "801", "774", "65552"] })),
-		},
-		{
-			headers: { "Content-Type": "application/grpc" },
-			body: gRPC.encode(),
-		},
-	);
+test("RegionShortcut setting is used to build both shortcut icons and home tabs", async () => {
+	await Request({
+		method: "POST",
+		url: "https://app.bilibili.com/bilibili.app.show.v1.Mixture/RegionShortcut",
+		headers: { "Content-Type": "application/grpc" },
+		body: gRPC.encode(RegionShortcutReq.toBinary({ uniqueId: ["1028", "884", "801", "774", "65552"] })),
+	});
+	const regionListResponse = await runRegionList(RegionListReply.create({ contents: [] }));
+	const regionList = RegionListReply.fromBinary(gRPC.decode(regionListResponse.body));
 	const response = await Response({ url: "https://app.bilibili.com/x/resource/show/tab/v2", headers: {} }, { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: 0, data: {} }) });
 	const tabs = JSON.parse(response.body).data.tab;
 
 	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, ["1028", "884", "801", "774", "65552"]);
 	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Caches", {}), {});
+	assert.deepEqual(
+		regionList.shortcut.icons.map(icon => icon.uniqueId),
+		["1028", "884", "801", "774", "65552"],
+	);
 	assert.deepEqual(
 		tabs.map(tab => tab.id),
 		[1028, 884, 801, 774, 65552],

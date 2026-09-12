@@ -1,11 +1,11 @@
 import gRPC from "@nsnanocat/grpc";
 import { URL } from "@nsnanocat/url";
-import { $app, Console, Storage } from "@nsnanocat/util";
+import { $app, Console } from "@nsnanocat/util";
 import database from "../function/database.mjs";
 import fixHeaders from "../function/fixHeaders.mjs";
 import setENV from "../function/setENV.mjs";
 import { addSettingsEntry } from "../function/settingsEntry.mjs";
-import { RegionListReply, RegionShortcutReq } from "../protobuf/bilibili/app/show/v1/mixture.js";
+import { RegionListReply } from "../protobuf/bilibili/app/show/v1/mixture.js";
 /***************** Processing *****************/
 export async function Response($request, $response) {
 	// 解构URL
@@ -207,22 +207,13 @@ export async function Response($request, $response) {
 								case "/bilibili.app.show.v1.Mixture/RegionList": {
 									body = RegionListReply.fromBinary(rawBody);
 									body.contents = mergeRegionList(body.contents, Configs.RegionList);
-									const serverIds = body.shortcut?.icons.map(icon => icon.uniqueId) ?? [];
-									const shortcutIds = serverIds.length ? serverIds : Settings.Home.Tab;
-									const shortcutIcons = getRegionIcons(shortcutIds, body.contents);
+									const shortcutIcons = Settings.Home.Tab.map(uniqueId => {
+										const item = Configs.RegionList.items[uniqueId];
+										if (!item) return;
+										return { img: item.img, title: item.title, url: item.url, uniqueId, rid: item.rid };
+									}).filter(Boolean);
 									body.shortcut = { title: body.shortcut?.title ?? "快捷访问", icons: shortcutIcons };
-									if (serverIds.length) {
-										Settings.Home.Tab = serverIds;
-										Storage.setItem("@BiliBili.Enhanced.Settings", Settings);
-									}
 									rawBody = RegionListReply.toBinary(body);
-									break;
-								}
-								case "/bilibili.app.show.v1.Mixture/RegionShortcut": {
-									const requestBody = $app === "Quantumult X" ? new Uint8Array($request.bodyBytes ?? []) : $request.body instanceof ArrayBuffer ? new Uint8Array($request.body) : ($request.body ?? new Uint8Array());
-									const request = RegionShortcutReq.fromBinary(gRPC.decode(requestBody));
-									Settings.Home.Tab = request.uniqueId;
-									Storage.setItem("@BiliBili.Enhanced.Settings", Settings);
 									break;
 								}
 							}
@@ -255,17 +246,6 @@ function mergeRegionList(onlineContents, localRegionList) {
 	}
 	const configuredTitles = new Set(localRegionList.groups.map(group => group.title));
 	return [...localRegionList.groups.map(group => groups.get(group.title)), ...contents.filter(content => !configuredTitles.has(content.title))];
-}
-
-function getRegionIcons(uniqueIds, contents) {
-	return uniqueIds
-		.map(uniqueId => {
-			for (const content of contents) {
-				const icon = content.icons.find(icon => icon.uniqueId === uniqueId);
-				if (icon) return icon;
-			}
-		})
-		.filter(Boolean);
 }
 
 function buildTabs(uniqueIds, regionList, defaultTab) {
