@@ -76,14 +76,14 @@ test("Tab endpoint uses response scripts in every platform template", () => {
 	}
 });
 
-test("RegionShortcut uses request and response scripts while RegionList stays response-only", () => {
+test("RegionShortcut uses only the request script while RegionList stays response-only", () => {
 	const templates = ["surge.handlebars", "surge.dev.handlebars", "loon.handlebars", "loon.dev.handlebars", "quantumultx.handlebars", "quantumultx.dev.handlebars", "shadowrocket.handlebars", "stash.handlebars", "stash.dev.handlebars"];
 
 	for (const template of templates) {
 		const content = readFileSync(new URL(`../template/${template}`, import.meta.url), "utf8");
 		const lines = content.split("\n");
-		const responseIndex = lines.findIndex(line => line.includes("Mixture") && line.includes("(RegionList|RegionShortcut)$"));
-		const requestIndex = lines.findIndex(line => line.includes("Mixture") && line.includes("RegionShortcut$") && !line.includes("(RegionList|RegionShortcut)"));
+		const responseIndex = lines.findIndex(line => line.includes("Mixture") && line.includes("RegionList$"));
+		const requestIndex = lines.findIndex(line => line.includes("Mixture") && line.includes("RegionShortcut$") && !line.includes("RegionList$"));
 		assert.notEqual(responseIndex, -1, `${template} must contain the Mixture response endpoints`);
 		assert.notEqual(requestIndex, -1, `${template} must contain the RegionShortcut request endpoint`);
 		const responseBlock = lines.slice(responseIndex, responseIndex + 6).join("\n");
@@ -92,14 +92,14 @@ test("RegionShortcut uses request and response scripts while RegionList stays re
 		assert.match(requestBlock, /request/, `${template} must use the request script for RegionShortcut`);
 		assert.match(template.startsWith("stash") ? content : requestBlock, /request(\.dev)?\.bundle/, `${template} must reference the Enhanced request bundle`);
 		assert.match(requestBlock, /\(grpc\|app\)/, `${template} must intercept both RegionShortcut hosts`);
-		assert.ok(!lines.some(line => line.includes("Mixture") && line.includes("RegionList$") && !line.includes("(RegionList|RegionShortcut)")), `${template} must not intercept RegionList requests`);
+		assert.ok(!lines.some(line => line.includes("Mixture") && line.includes("(RegionList|RegionShortcut)")), `${template} must not combine RegionList and RegionShortcut response matching`);
 		assert.match(content, /grpc\.biliapi\.net/);
 	}
 
 	for (const script of ["Response.mjs", "Response.dev.mjs"]) {
 		const content = readFileSync(new URL(`../src/process/${script}`, import.meta.url), "utf8");
 		assert.match(content, /case "\/bilibili\.app\.show\.v1\.Mixture\/RegionList"/);
-		assert.match(content, /case "\/bilibili\.app\.show\.v1\.Mixture\/RegionShortcut"/);
+		assert.doesNotMatch(content, /case "\/bilibili\.app\.show\.v1\.Mixture\/RegionShortcut"/);
 	}
 
 	for (const script of ["Request.mjs", "Request.dev.mjs"]) {
