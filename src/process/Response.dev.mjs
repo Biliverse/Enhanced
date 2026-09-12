@@ -244,7 +244,7 @@ export async function Response($request, $response) {
 										if (!item) return;
 										return { img: item.img, title: item.title, url: item.url, uniqueId, rid: item.rid };
 									}).filter(Boolean);
-									body.shortcut = { title: body.shortcut?.title ?? "快捷访问", icons: shortcutIcons };
+									body.shortcut = { title: "自定义标签页", icons: shortcutIcons };
 									rawBody = RegionListReply.toBinary(body);
 									break;
 								}

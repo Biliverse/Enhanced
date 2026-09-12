@@ -27,9 +27,9 @@ test("RegionList config contains the captured entries and every custom tab", () 
 	assert.equal(RegionList.groups.length, 4);
 	assert.deepEqual(
 		RegionList.groups.map(group => group.title),
-		["默认标签页", "推荐分区/服务", "港澳台分区/服务", "全部分区"],
+		["默认分区", "推荐分区/服务", "港澳台分区/服务", "全部分区"],
 	);
-	assert.deepEqual(RegionList.groups.find(group => group.title === "默认标签页").ids, RegionList.defaultShortcut);
+	assert.deepEqual(RegionList.groups.find(group => group.title === "默认分区").ids, RegionList.defaultShortcut);
 	assert.deepEqual(RegionList.groups.find(group => group.title === "港澳台分区/服务").ids, ["774", "801", "884", "1028"]);
 	assert.equal(regionIds.length, 57);
 	assert.equal(uniqueIds.size, regionIds.length);
@@ -75,8 +75,9 @@ test("RegionList response keeps online entries and applies the configured sectio
 
 	assert.deepEqual(
 		result.contents.map(content => content.title),
-		["默认标签页", "推荐分区/服务", "港澳台分区/服务", "全部分区"],
+		["默认分区", "推荐分区/服务", "港澳台分区/服务", "全部分区"],
 	);
+	assert.equal(result.shortcut.title, "自定义标签页");
 	assert.equal(icons.length, 57);
 	assert.equal(icons.filter(icon => icon.uniqueId === "13").length, 1);
 	assert.equal(icons.find(icon => icon.uniqueId === "13").url, "bilibili://online");
@@ -95,6 +96,7 @@ test("empty RegionList shortcut uses the Enhanced default tabs", async () => {
 	const result = RegionListReply.fromBinary(gRPC.decode(response.body));
 	const shortcutIds = result.shortcut.icons.map(icon => icon.uniqueId);
 
+	assert.equal(result.shortcut.title, "自定义标签页");
 	assert.deepEqual(shortcutIds, ["2036", "2037", "780", "545", "151"]);
 	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}), {});
 });
