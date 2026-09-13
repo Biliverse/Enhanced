@@ -1,5 +1,5 @@
 ### 🔄 Other Changes
-  * 由 Enhanced 唯一安装 PreferencePanes 1.1.1 的通用 `web.js`，统一服务全部模块设置页；`api.js` 仅处理 Enhanced 配置探测与持久化
+  * 由 Enhanced 唯一安装 PreferencePanes 1.1.2 的通用 `web.js` 与 `api.js`，统一服务全部模块的设置页、BoxJS 转发和通用存储操作；Enhanced 自身仅额外提供 `/configs/Enhanced`
 
 ### 🆕 New Features
   * 新增了首页、分区、我的标签页的自定义功能开关

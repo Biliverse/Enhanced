@@ -29,7 +29,7 @@ http:
       name: PreferencePanes.Web
       type: request
       require-body: false
-    - match: ^https:\/\/(?:biliverse\.github\.io|app\.bilibili\.com)\/api\/Enhanced(?:\/(?:get|set|delete))?\/?(?:\?.*)?$
+    - match: ^https:\/\/(?:biliverse\.github\.io|app\.bilibili\.com)\/api\/[a-zA-Z0-9_-]+\/?(?:\?.*)?$
       name: PreferencePanes.API
       type: request
       require-body: true
