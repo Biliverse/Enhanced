@@ -6,7 +6,7 @@ BoxJS 设置字段由现有 arguments-builder 生成，并与本仓库业务脚�
 
 模板同时安装版本对应的 `/configs/Enhanced` JSON Mock 和 PreferencePanes 的通用 latest API。Surge/Loon 使用原生远程 JSON Mock；其它平台的 `config[.dev].bundle.js` 只返回同版 JSON。Enhanced 不依赖 PreferencePanes npm 包，不生成或发布 settings.bundle.js，设置页与存储实现全部来自 PreferencePanes Release。
 
-不再需要独立设置模块。模板内的通用运行规则引用 `https://github.com/NSNanoCat/PreferencePanes/releases/latest/download/api.js`，只处理模块页面、`app.mjs`、`navigation.mjs` 和 POST /api/get、set、delete。请求使用 form 完整 @root.path，不鉴权；设置字段仍从当前 Enhanced 版本的 JSON 取得。
+不再需要独立设置模块。模板内的通用运行规则引用 `https://github.com/NSNanoCat/PreferencePanes/releases/latest/download/api.js`，只处理模块页面、`index.mjs`、`navigation.mjs` 和 POST /api/get、set、delete。请求使用 form 完整 @root.path，不鉴权；设置字段仍从当前 Enhanced 版本的 JSON 取得。
 
 dev 工作流用一次 Gist API 更新业务脚本、JSON、配置响应和订阅；旧 settings.dev.bundle.js 已完成迁移删除。正式版文件由 Release 工作流一起上传，URL 固定到对应 tag。dev 按现有业务脚本惯例滚动更新；通用 API 独立升级，不和业务配置版本绑定。
 

@@ -30,9 +30,9 @@ test("settings integration installs separate web and module API scripts", async 
 		assert.ok(template.includes("https://github.com/NSNanoCat/PreferencePanes/releases/latest/download/api.js"), name);
 		assert.ok(template.includes("https://github.com/NSNanoCat/PreferencePanes/releases/latest/download/web.js"), name);
 		assert.ok(template.includes("api\\/Enhanced(?:\\/(?:get|set|delete))?\\/?"), name);
-		assert.ok(template.includes("settings\\/(?:Enhanced\\/?|assets\\/(?:app|navigation)\\.mjs)"), name);
+		assert.ok(template.includes("settings\\/(?:Enhanced\\/?|assets\\/(?:index|navigation)\\.mjs)"), name);
 		assert.doesNotMatch(template, /api\\\/\(\?:get\|set\|delete\)\|settings/);
-		assert.doesNotMatch(template, /assets\\\/(?:app\|host|host\|app)\)\\\.mjs/);
+		assert.doesNotMatch(template, /assets\\\/(?:index\|host|host\|index)\)\\\.mjs/);
 		assert.doesNotMatch(template, /Enhanced\.request\.js|PreferencePanes\.request\.js|settings\/assets\/index\.html/);
 		const line = template.split("\n").find(line => line.includes("configs") && line.includes("biliverse"));
 		assert.ok(line, name);
@@ -67,7 +67,7 @@ test("homepage and static mocks never overlap module pages, configs or storage A
 				false,
 				name,
 			);
-		for (const pathname of ["/settings/home.js", "/settings/bilibili.mjs", "/settings/assets/navigation.mjs", "/settings/Enhanced", "/settings/assets/app.mjs", "/settings/assets/host.mjs", "/configs/Enhanced", "/api/get", "/x/v2/account/mine", "/settings/theme.css"])
+		for (const pathname of ["/settings/home.js", "/settings/bilibili.mjs", "/settings/assets/navigation.mjs", "/settings/Enhanced", "/settings/assets/index.mjs", "/settings/assets/host.mjs", "/configs/Enhanced", "/api/get", "/x/v2/account/mine", "/settings/theme.css"])
 			assert.equal(
 				patterns.some(pattern => pattern.test(`https://app.bilibili.com${pathname}`)),
 				false,
