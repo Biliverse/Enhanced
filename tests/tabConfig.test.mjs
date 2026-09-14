@@ -114,3 +114,8 @@ test("BoxJS no longer exposes the Home.Tab checkbox", () => {
 	assert.ok(!settings.some(setting => setting.id === "@BiliBili.Enhanced.Settings.Home.Tab"));
 	assert.ok(settings.some(setting => setting.id === "@BiliBili.Enhanced.Settings.Home.Tab_default"));
 });
+
+test("argument config preserves the legacy Home.Tab array outside BoxJS", () => {
+	const config = readFileSync(new URL("../arguments-builder.full.config.ts", import.meta.url), "utf8");
+	assert.match(config, /key: "Home\.Tab"[\s\S]*defaultValue: \["live", "recommend", "hottopic", "bangumi", "anime", "film", "koreavtw"\][\s\S]*exclude: \["boxjs"\]/);
+});

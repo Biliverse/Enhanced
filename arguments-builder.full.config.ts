@@ -44,6 +44,69 @@ export const args: ArgumentItem[] = [
 		description: "启用后可自定义首页顶栏、标签页和底部导航栏内容。标签页由分区页的快捷访问决定。",
 	},
 	{
+		key: "Home.Tab",
+		name: "[首页] 标签页",
+		defaultValue: ["live", "recommend", "hottopic", "bangumi", "anime", "film", "koreavtw"],
+		type: "array",
+		boxJsType: "checkboxes",
+		exclude: ["boxjs"],
+		description: "请选择启用的首页标签页，建议不超过7个。",
+		options: [
+			{
+				key: "live",
+				label: "直播",
+			},
+			{
+				key: "recommend",
+				label: "推荐",
+			},
+			{
+				key: "hottopic",
+				label: "热门",
+			},
+			{
+				key: "bangumi",
+				label: "番剧",
+			},
+			{
+				key: "anime",
+				label: "动画（港澳台）",
+			},
+			{
+				key: "film",
+				label: "影视",
+			},
+			{
+				key: "koreavtw",
+				label: "韩综（港澳台）",
+			},
+			{
+				key: "game",
+				label: "游戏",
+			},
+			{
+				key: "minecraft",
+				label: "minecraft",
+			},
+			{
+				key: "anime_fan",
+				label: "动画同人",
+			},
+			{
+				key: "funny",
+				label: "搞笑",
+			},
+			{
+				key: "school",
+				label: "校园",
+			},
+			{
+				key: "digital",
+				label: "数码",
+			},
+		],
+	},
+	{
 		key: "Home.Tab_default",
 		name: "[首页] 默认标签页",
 		defaultValue: "2037",
