@@ -46,63 +46,43 @@ export const args: ArgumentItem[] = [
 	{
 		key: "Home.Tab",
 		name: "[首页] 标签页",
-		defaultValue: ["live", "recommend", "hottopic", "bangumi", "anime", "film", "koreavtw"],
+		defaultValue: ["2036", "2037", "780", "545", "151"],
 		type: "array",
 		boxJsType: "checkboxes",
 		exclude: ["boxjs"],
 		description: "请选择启用的首页标签页，建议不超过7个。",
 		options: [
 			{
-				key: "live",
+				key: "2036",
 				label: "直播",
 			},
 			{
-				key: "recommend",
+				key: "2037",
 				label: "推荐",
 			},
 			{
-				key: "hottopic",
+				key: "780",
 				label: "热门",
 			},
 			{
-				key: "bangumi",
+				key: "545",
 				label: "番剧",
 			},
 			{
-				key: "anime",
+				key: "774",
 				label: "动画（港澳台）",
 			},
 			{
-				key: "film",
+				key: "151",
 				label: "影视",
 			},
 			{
-				key: "koreavtw",
+				key: "801",
 				label: "韩综（港澳台）",
 			},
 			{
-				key: "game",
-				label: "游戏",
-			},
-			{
-				key: "minecraft",
-				label: "minecraft",
-			},
-			{
-				key: "anime_fan",
-				label: "动画同人",
-			},
-			{
-				key: "funny",
-				label: "搞笑",
-			},
-			{
-				key: "school",
+				key: "2280",
 				label: "校园",
-			},
-			{
-				key: "digital",
-				label: "数码",
 			},
 		],
 	},
