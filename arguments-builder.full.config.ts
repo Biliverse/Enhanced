@@ -250,6 +250,7 @@ export const args: ArgumentItem[] = [
 		name: "[储存] 配置类型",
 		defaultValue: "PersistentStore",
 		type: "string",
+		exclude: ["boxjs"],
 		options: [
 			{ key: "Argument", label: "优先使用 $argument，其次使用 PersistentStore (BoxJs)，最后使用 database.mjs 的默认配置" },
 			{ key: "PersistentStore", label: "优先使用 PersistentStore (BoxJs)，其次使用 $argument，最后使用 database.mjs 的默认配置" },
