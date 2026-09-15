@@ -1,9 +1,9 @@
+import { RegionShortcutReq } from "@biliverse/protobuf/bilibili/app/show/v1/mixture.js";
 import gRPC from "@nsnanocat/grpc";
 import { URL } from "@nsnanocat/url";
 import { $app, Console, Storage } from "@nsnanocat/util";
 import database from "../function/database.mjs";
 import setENV from "../function/setENV.mjs";
-import { RegionShortcutReply, RegionShortcutReq } from "@biliverse/protobuf/bilibili/app/show/v1/mixture.js";
 /***************** Processing *****************/
 export async function Request($request) {
 	let $response;
@@ -44,7 +44,6 @@ export async function Request($request) {
 									"grpc-message": "",
 									"bili-status-code": "0",
 								},
-								body: gRPC.encode(RegionShortcutReply.toBinary({})),
 							};
 							break;
 						}

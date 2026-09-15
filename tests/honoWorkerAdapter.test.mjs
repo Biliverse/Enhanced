@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { rmSync, writeFileSync } from "node:fs";
 import { after, beforeEach, test } from "node:test";
+import { RegionShortcutReq } from "@biliverse/protobuf/bilibili/app/show/v1/mixture.js";
 import gRPC from "@nsnanocat/grpc";
 import { Storage } from "@nsnanocat/util";
 import HonoWorkerAdapter from "../src/class/HonoWorkerAdapter.mjs";
 import { Request } from "../src/process/Request.mjs";
 import { Response } from "../src/process/Response.mjs";
-import { RegionShortcutReply, RegionShortcutReq } from "@biliverse/protobuf/bilibili/app/show/v1/mixture.js";
 
 const storageFile = `/tmp/biliverse-enhanced-hono-worker-${process.pid}.json`;
 Storage.dataFile = storageFile;
@@ -14,6 +14,7 @@ Storage.dataFile = storageFile;
 beforeEach(() => {
 	writeFileSync(storageFile, "{}\n");
 	Storage.data = null;
+	globalThis.$argument = {};
 });
 
 after(() => rmSync(storageFile, { force: true }));
@@ -84,7 +85,7 @@ test("returns a fully local Tab response during request processing", async () =>
 	assert.ok(body.data.tab.every(item => typeof item.id === "number"));
 });
 
-test("writes the local RegionShortcut business response through Hono", async () => {
+test("writes the local RegionShortcut trailers-only response through Hono", async () => {
 	const written = { headers: {} };
 	const context = {
 		header(name, value) {
@@ -113,8 +114,7 @@ test("writes the local RegionShortcut business response through Hono", async () 
 		"grpc-message": "",
 		"bili-status-code": "0",
 	});
-	assert.equal(result.body.byteLength, 5);
-	assert.equal(RegionShortcutReply.fromBinary(gRPC.decode(result.body)).limit, undefined);
+	assert.equal(result.body, null);
 });
 
 test("uses semantic IDs for top and bottom response filtering", async () => {
