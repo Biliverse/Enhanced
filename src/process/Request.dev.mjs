@@ -3,7 +3,7 @@ import { URL } from "@nsnanocat/url";
 import { $app, Console, Storage } from "@nsnanocat/util";
 import database from "../function/database.mjs";
 import setENV from "../function/setENV.mjs";
-import { RegionShortcutReq } from "../protobuf/bilibili/app/show/v1/mixture.js";
+import { RegionShortcutReq } from "@biliverse/protobuf/bilibili/app/show/v1/mixture.js";
 /***************** Processing *****************/
 export async function Request($request) {
 	let $response;

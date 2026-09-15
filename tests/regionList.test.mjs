@@ -6,7 +6,7 @@ import { Storage } from "@nsnanocat/util";
 import database from "../src/function/database.mjs";
 import { Request } from "../src/process/Request.mjs";
 import { Response } from "../src/process/Response.mjs";
-import { RegionListReply, RegionShortcutReq } from "../src/protobuf/bilibili/app/show/v1/mixture.js";
+import { RegionListReply, RegionShortcutReq } from "@biliverse/protobuf/bilibili/app/show/v1/mixture.js";
 
 globalThis.$argument = {};
 const storageFile = `/tmp/biliverse-enhanced-region-list-${process.pid}.json`;
