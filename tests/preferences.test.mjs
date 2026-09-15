@@ -24,6 +24,9 @@ function extractTemplatePattern(name, line) {
 
 test("BoxJS paths match the persistence consumed by business requests", async () => {
 	assert.ok(config.every(field => field.id.startsWith("@BiliBili.Enhanced.Settings.")));
+	const storage = config.find(field => field.id === "@BiliBili.Enhanced.Settings.Storage");
+	assert.equal(storage.val, "PersistentStore");
+	assert.equal(storage.desc, "默认使用 PersistentStore，配置优先级为 database -> $argument -> PersistentStore (BoxJs)；选择 Argument 时为 database -> PersistentStore (BoxJs) -> $argument。");
 	store.set("BiliBili", JSON.stringify({ Enhanced: { Settings: { Storage: "PersistentStore", Home: { Top: [] } } }, Global: { sentinel: true } }));
 	const result = await Request({ url: "https://app.bilibili.com/x/resource/show/tab/v2", method: "GET", headers: {} });
 	assert.deepEqual(JSON.parse(result.$response.body).data.top, []);
