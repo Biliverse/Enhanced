@@ -57,18 +57,19 @@ export async function Request($request) {
 						case "/x/resource/show/tab/v2": {
 							// 首页标签页。
 							// Homepage tabs.
-							if (!Settings.Home?.Switch) break;
-							const body = {
-								code: 0,
-								config: { ...Configs.Tab.config },
-								data: {},
-								message: "0",
-							};
-							Tab.replace(body.data, Settings, Configs);
-							$response = {
-								headers: { "Content-Type": "application/json; charset=utf-8" },
-								body: JSON.stringify(body),
-							};
+							if (Settings.Home?.Switch) {
+								const body = {
+									code: 0,
+									config: { ...Configs.Tab.config },
+									data: {},
+									message: "0",
+								};
+								Tab.replace(body.data, Settings, Configs);
+								$response = {
+									headers: { "Content-Type": "application/json; charset=utf-8" },
+									body: JSON.stringify(body),
+								};
+							}
 							break;
 						}
 					}

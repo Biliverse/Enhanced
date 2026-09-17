@@ -78,8 +78,9 @@ export async function Response($request, $response) {
 						case "/x/resource/show/tab/v2":
 							// 首页标签页。
 							// Homepage tabs.
-							if (!Settings.Home?.Switch) break;
-							Tab.replace(body.data, Settings, Configs);
+							if (Settings.Home?.Switch) {
+								Tab.replace(body.data, Settings, Configs);
+							}
 							break;
 						case "/x/resource/show/tab/bubble":
 							// 首页标签页气泡。
@@ -103,8 +104,9 @@ export async function Response($request, $response) {
 							break;
 						case "/x/v2/region/index":
 						case "/x/v2/channel/region/list": {
-							if (!Settings.Region?.Switch) break;
-							body.data = Region.replaceIndex(body.data, url.pathname, Settings.Region);
+							if (Settings.Region?.Switch) {
+								body.data = Region.replaceIndex(body.data, url.pathname, Settings.Region);
+							}
 							break;
 						}
 					}
