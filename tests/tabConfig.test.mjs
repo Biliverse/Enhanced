@@ -90,6 +90,8 @@ test("RegionShortcut uses only the request script while RegionList stays respons
 		const requestBlock = lines.slice(requestIndex, requestIndex + 6).join("\n");
 		assert.match(responseBlock, /response/, `${template} must use the response script`);
 		assert.match(requestBlock, /request/, `${template} must use the request script for RegionShortcut`);
+		if (template === "stash.handlebars") assert.match(responseBlock, /name: 📺 BiliBili\.Enhanced\.response/, `${template} must reference its response provider`);
+		if (template === "stash.dev.handlebars") assert.match(responseBlock, /name: 📺 BiliBili\.Enhanced\.response\.dev/, `${template} must reference its response provider`);
 		assert.match(template.startsWith("stash") ? content : requestBlock, /request(\.dev)?\.bundle/, `${template} must reference the Enhanced request bundle`);
 		assert.match(requestBlock, /\(grpc\|app\)/, `${template} must intercept both RegionShortcut hosts`);
 		assert.ok(!lines.some(line => line.includes("Mixture") && line.includes("(RegionList|RegionShortcut)")), `${template} must not combine RegionList and RegionShortcut response matching`);
