@@ -81,7 +81,9 @@ test("homepage and static mocks never overlap module pages, configs or storage A
 		const native = /^(surge|loon)/.test(name);
 		const candidates = lines.filter(
 			line =>
-				(line.includes("app\\.bilibili\\.com\\/settings\\/") || line.includes("biliverse\\.github\\.io\\/settings\\/theme\\.css")) && (line.trimStart().startsWith("^https") || line.startsWith("http-request ") || line.startsWith("response if") || line.trimStart().startsWith("- match:") || line.includes("pattern=")),
+				(line.includes("app\\.bilibili\\.com\\/settings\\/") || line.includes("biliverse\\.github\\.io\\/settings\\/theme\\.css")) &&
+				!line.includes("response-header-") &&
+				(line.trimStart().startsWith("^https") || line.startsWith("http-request ") || line.startsWith("response if") || line.trimStart().startsWith("- match:") || line.includes("pattern=")),
 		);
 		const patterns = candidates.map(line => new RegExp(extractTemplatePattern(name, line)));
 		assert.equal(patterns.length, native ? 8 : 1, name);
@@ -99,5 +101,20 @@ test("homepage and static mocks never overlap module pages, configs or storage A
 				false,
 				name,
 			);
+	}
+});
+
+test("Loon uses documented legacy URL-backed response mocks", async () => {
+	for (const name of ["loon.handlebars", "loon.dev.handlebars"]) {
+		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
+		const mocks = template.split("\n").filter(line => line.includes("mock-response-body"));
+		assert.equal(mocks.length, 8, name);
+		for (const line of mocks) {
+			assert.match(line, / data-path=https:\/\//, name);
+			assert.match(line, / status-code=200$/, name);
+		}
+		assert.doesNotMatch(template, /response\.body\.mock_file/, name);
+		assert.equal((template.match(/response-header-add Cache-Control no-store/g) ?? []).length, 7, name);
+		assert.match(template, /response-header-add X-PreferencePanes-Version \{\{version\}\} Cache-Control no-store/, name);
 	}
 });
