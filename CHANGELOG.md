@@ -1,3 +1,10 @@
+# Unreleased
+
+### 🛠️ Bug Fixes
+
+	* 将 BoxJs v1 与 PreferencePanes v2 配置拆分为独立 JSON 产物，避免将不支持的设置类型发布到 BoxJs。
+	* 恢复 BoxJs 首页标签页复选框，并兼容其旧版标签页、顶栏和底栏设置值。
+
 # v0.6.0
 
 ### 🔄 Other Changes
