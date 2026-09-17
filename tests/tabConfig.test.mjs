@@ -113,8 +113,8 @@ test("RegionShortcut uses only the request script while RegionList stays respons
 
 test("BoxJS no longer exposes the Home.Tab checkbox", () => {
 	const settings = JSON.parse(readFileSync(new URL("../template/boxjs.settings.json", import.meta.url), "utf8"));
-	assert.ok(!settings.some(setting => setting.id === "@BiliBili.Enhanced.Settings.Home.Tab"));
-	assert.ok(settings.some(setting => setting.id === "@BiliBili.Enhanced.Settings.Home.Tab_default"));
+	assert.ok(!settings.some(setting => setting.id === "@Biliverse.Enhanced.Settings.Home.Tab"));
+	assert.ok(settings.some(setting => setting.id === "@Biliverse.Enhanced.Settings.Home.Tab_default"));
 });
 
 test("argument config uses RegionList IDs for Home.Tab outside BoxJS", () => {

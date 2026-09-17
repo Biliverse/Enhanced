@@ -99,7 +99,7 @@ test("empty RegionList shortcut uses the Enhanced default tabs", async () => {
 
 	assert.equal(result.shortcut.title, "自定义标签页");
 	assert.deepEqual(shortcutIds, ["2036", "2037", "780", "545", "151"]);
-	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}), {});
+	assert.deepEqual(Storage.getItem("@Biliverse.Enhanced.Settings", {}), {});
 });
 
 test("RegionShortcut is consumed locally with a trailers-only gRPC success response on every observed host", async () => {
@@ -120,8 +120,8 @@ test("RegionShortcut is consumed locally with a trailers-only gRPC success respo
 			"bili-status-code": "0",
 		});
 		assert.equal($response.body, undefined);
-		assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, uniqueIds);
-		assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Caches", {}), {});
+		assert.deepEqual(Storage.getItem("@Biliverse.Enhanced.Settings", {}).Home.Tab, uniqueIds);
+		assert.deepEqual(Storage.getItem("@Biliverse.Enhanced.Caches", {}), {});
 	}
 });
 
@@ -133,7 +133,7 @@ test("empty RegionShortcut request remains empty", async () => {
 		body: gRPC.encode(RegionShortcutReq.toBinary({ uniqueId: [] })),
 	});
 
-	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, []);
+	assert.deepEqual(Storage.getItem("@Biliverse.Enhanced.Settings", {}).Home.Tab, []);
 });
 
 test("RegionShortcut clear sentinel keeps shortcuts and home tabs empty", async () => {
@@ -148,7 +148,7 @@ test("RegionShortcut clear sentinel keeps shortcuts and home tabs empty", async 
 	const homeResponse = await Response({ url: "https://app.bilibili.com/x/resource/show/tab/v2", headers: {} }, { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: 0, data: {} }) });
 	const tabs = JSON.parse(homeResponse.body).data.tab;
 
-	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, ["0"]);
+	assert.deepEqual(Storage.getItem("@Biliverse.Enhanced.Settings", {}).Home.Tab, ["0"]);
 	assert.deepEqual(regionList.shortcut.icons, []);
 	assert.deepEqual(tabs, []);
 });
@@ -183,8 +183,8 @@ test("RegionShortcut setting is used to build both shortcut icons and home tabs"
 	const response = await Response({ url: "https://app.bilibili.com/x/resource/show/tab/v2", headers: {} }, { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: 0, data: {} }) });
 	const tabs = JSON.parse(response.body).data.tab;
 
-	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, ["1028", "884", "801", "774", "65552"]);
-	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Caches", {}), {});
+	assert.deepEqual(Storage.getItem("@Biliverse.Enhanced.Settings", {}).Home.Tab, ["1028", "884", "801", "774", "65552"]);
+	assert.deepEqual(Storage.getItem("@Biliverse.Enhanced.Caches", {}), {});
 	assert.deepEqual(
 		regionList.shortcut.icons.map(icon => icon.uniqueId),
 		["1028", "884", "801", "774", "65552"],
@@ -221,7 +221,7 @@ test("saved RegionShortcut tabs override module argument defaults in later respo
 	const homeResponse = await Response({ url: "https://app.bilibili.com/x/resource/show/tab/v2", headers: {} }, { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: 0, data: {} }) });
 	const tabs = JSON.parse(homeResponse.body).data.tab;
 
-	assert.deepEqual(Storage.getItem("@BiliBili.Enhanced.Settings", {}).Home.Tab, uniqueIds);
+	assert.deepEqual(Storage.getItem("@Biliverse.Enhanced.Settings", {}).Home.Tab, uniqueIds);
 	assert.deepEqual(
 		regionList.shortcut.icons.map(icon => icon.uniqueId),
 		uniqueIds,

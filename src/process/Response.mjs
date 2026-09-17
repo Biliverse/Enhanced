@@ -33,7 +33,7 @@ export async function Response($request, $response) {
 	 * Current module settings.
 	 * @type {{Settings: import('../types').Settings}}
 	 */
-	const { Settings, Configs } = setENV("BiliBili", "Enhanced", database);
+	const { Settings, Configs } = setENV("Biliverse", "Enhanced", database);
 	Console.logLevel = Settings.LogLevel;
 	// 创建空数据。
 	// Create empty data.

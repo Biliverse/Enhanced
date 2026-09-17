@@ -2364,7 +2364,7 @@ export default class Region {
 	static saveShortcuts(request, settings) {
 		const rawBody = $app === "Quantumult X" ? new Uint8Array(request.bodyBytes ?? []) : (request.body ?? new Uint8Array());
 		settings.Home.Tab = RegionShortcutReq.fromBinary(gRPC.decode(rawBody)).uniqueId;
-		Storage.setItem("@BiliBili.Enhanced.Settings", settings);
+		Storage.setItem("@Biliverse.Enhanced.Settings", settings);
 	}
 
 	/**

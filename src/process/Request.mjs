@@ -25,7 +25,7 @@ export async function Request($request) {
 	 * Current module settings.
 	 * @type {{Settings: import('../types').Settings}}
 	 */
-	const { Settings, Configs } = setENV("BiliBili", "Enhanced", database);
+	const { Settings, Configs } = setENV("Biliverse", "Enhanced", database);
 	Console.logLevel = Settings.LogLevel;
 	// 方法判断。
 	// Method handling.
