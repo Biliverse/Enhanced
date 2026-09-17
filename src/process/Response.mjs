@@ -89,7 +89,7 @@ export async function Response($request, $response) {
 							// 我的账户信息。
 							// Mine account information.
 							if (Settings.Mine?.Switch) {
-								Mine.replaceSections(body.data, Settings.Mine, Configs.Mine);
+								Mine.replaceSections(body.data, Settings.Mine);
 							}
 							if (body.code === 0 && body.data) Mine.addEntry(body.data);
 							break;
@@ -97,14 +97,14 @@ export async function Response($request, $response) {
 							// iPad 我的账户信息。
 							// iPad Mine account information.
 							if (Settings.Mine?.iPad?.Switch) {
-								Mine.replacePadSections(body.data, Settings.Mine.iPad, Configs.Mine);
+								Mine.replacePadSections(body.data, Settings.Mine.iPad);
 							}
 							if (body.code === 0 && body.data) Mine.addEntry(body.data, true);
 							break;
 						case "/x/v2/region/index":
 						case "/x/v2/channel/region/list": {
 							if (!Settings.Region?.Switch) break;
-							body.data = Region.replaceIndex(body.data, url.pathname, Settings.Region, Configs.Region);
+							body.data = Region.replaceIndex(body.data, url.pathname, Settings.Region);
 							break;
 						}
 					}
