@@ -98,52 +98,56 @@ export async function Response($request, $response) {
 						case "/x/resource/show/tab/bubble": // 首页-Tab-?
 							break;
 						case "/x/v2/account/mine": // 账户信息-我的
-							if (!Settings.Mine?.Switch) break;
-							body.data.sections_v2 = Configs.Mine.sections_v2.map(e => {
-								switch (e.title) {
-									case "创作中心":
-										e.items = e.items
-											.map(item => {
-												if (Settings.Mine.CreatorCenter.includes(item.id)) return item;
-											})
-											.filter(Boolean);
-										break;
-									case "推荐服务":
-										e.items = e.items
-											.map(item => {
-												if (Settings.Mine.Recommend.includes(item.id)) return item;
-											})
-											.filter(Boolean);
-										break;
-									case "更多服务":
-										e.items = e.items
-											.map(item => {
-												if (Settings.Mine.More.includes(item.id)) return item;
-											})
-											.filter(Boolean);
-										break;
-								}
-								if (!e.items.some(() => true)) e = {};
-								return e;
-							});
+							if (Settings.Mine?.Switch) {
+								body.data.sections_v2 = Configs.Mine.sections_v2.map(e => {
+									switch (e.title) {
+										case "创作中心":
+											e.items = e.items
+												.map(item => {
+													if (Settings.Mine.CreatorCenter.includes(item.id)) return item;
+												})
+												.filter(Boolean);
+											break;
+										case "推荐服务":
+											e.items = e.items
+												.map(item => {
+													if (Settings.Mine.Recommend.includes(item.id)) return item;
+												})
+												.filter(Boolean);
+											break;
+										case "更多服务":
+											e.items = e.items
+												.map(item => {
+													if (Settings.Mine.More.includes(item.id)) return item;
+												})
+												.filter(Boolean);
+											break;
+									}
+									if (!e.items.some(() => true)) e = {};
+									return e;
+								});
+							}
+							if (body.code === 0 && body.data) addSettingsEntry(body.data);
 							break;
 						case "/x/v2/account/mine/ipad": // 账户信息-我的(pad)
-							if (!Settings.Mine?.iPad?.Switch) break;
-							body.data.ipad_upper_sections = Configs.Mine.ipad_upper_sections
-								.map(item => {
-									if (Settings.Mine.iPad.Upper.includes(item.id)) return item;
-								})
-								.filter(Boolean);
-							body.data.ipad_recommend_sections = Configs.Mine.ipad_recommend_sections
-								.map(item => {
-									if (Settings.Mine.iPad.Recommend.includes(item.id)) return item;
-								})
-								.filter(Boolean);
-							body.data.ipad_more_sections = Configs.Mine.ipad_more_sections
-								.map(item => {
-									if (Settings.Mine.iPad.More.includes(item.id)) return item;
-								})
-								.filter(Boolean);
+							if (Settings.Mine?.iPad?.Switch) {
+								body.data.ipad_upper_sections = Configs.Mine.ipad_upper_sections
+									.map(item => {
+										if (Settings.Mine.iPad.Upper.includes(item.id)) return item;
+									})
+									.filter(Boolean);
+								body.data.ipad_recommend_sections = Configs.Mine.ipad_recommend_sections
+									.map(item => {
+										if (Settings.Mine.iPad.Recommend.includes(item.id)) return item;
+									})
+									.filter(Boolean);
+								body.data.ipad_more_sections = Configs.Mine.ipad_more_sections
+									.map(item => {
+										if (Settings.Mine.iPad.More.includes(item.id)) return item;
+									})
+									.filter(Boolean);
+							}
+							if (body.code === 0 && body.data) addSettingsEntry(body.data, true);
 							break;
 						case "/x/v2/region/index":
 						case "/x/v2/channel/region/list": {
@@ -194,7 +198,6 @@ export async function Response($request, $response) {
 				case "api.biliapi.net":
 					break;
 			}
-			if (["app.bilibili.com", "app.biliapi.net"].includes(url.hostname) && ["/x/v2/account/mine", "/x/v2/account/mine/ipad"].includes(url.pathname) && body.code === 0 && body.data) addSettingsEntry(body.data, url.pathname.endsWith("/ipad"));
 			$response.body = JSON.stringify(body);
 			break;
 		case "application/protobuf":
