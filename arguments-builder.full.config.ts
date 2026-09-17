@@ -138,7 +138,7 @@ export const regionSwitch: ArgumentItem = {
 
 export const regionIndex: ArgumentItem = {
 	key: "Region.Index",
-	name: "分区选择",
+	name: "[分区] 分区选择",
 	type: "array",
 	boxJsType: "checkboxes",
 	defaultValue: [
@@ -239,7 +239,7 @@ export const mineSwitch: ArgumentItem = {
 
 export const mineCreatorCenter: ArgumentItem = {
 	key: "Mine.CreatorCenter",
-	name: "创作中心",
+	name: "[我的] 创作中心",
 	type: "array",
 	boxJsType: "checkboxes",
 	defaultValue: [],
@@ -259,7 +259,7 @@ export const mineCreatorCenter: ArgumentItem = {
 
 export const mineRecommend: ArgumentItem = {
 	key: "Mine.Recommend",
-	name: "推荐服务",
+	name: "[我的] 推荐服务",
 	type: "array",
 	boxJsType: "checkboxes",
 	defaultValue: ["400", "402", "404", "403"],
@@ -283,7 +283,7 @@ export const mineRecommend: ArgumentItem = {
 
 export const mineMore: ArgumentItem = {
 	key: "Mine.More",
-	name: "更多服务",
+	name: "[我的] 更多服务",
 	type: "array",
 	boxJsType: "checkboxes",
 	defaultValue: ["407", "410", "1028"],
@@ -310,7 +310,7 @@ export const mineIPadSwitch: ArgumentItem = {
 
 export const mineIPadUpper: ArgumentItem = {
 	key: "Mine.iPad.Upper",
-	name: "创作中心",
+	name: "[我的 iPad版] 创作中心",
 	type: "array",
 	boxJsType: "checkboxes",
 	defaultValue: [],
@@ -326,7 +326,7 @@ export const mineIPadUpper: ArgumentItem = {
 
 export const mineIPadRecommend: ArgumentItem = {
 	key: "Mine.iPad.Recommend",
-	name: "推荐服务",
+	name: "[我的 iPad版] 推荐服务",
 	type: "array",
 	boxJsType: "checkboxes",
 	defaultValue: ["789", "790", "791", "793", "794", "2542"],
@@ -345,7 +345,7 @@ export const mineIPadRecommend: ArgumentItem = {
 
 export const mineIPadMore: ArgumentItem = {
 	key: "Mine.iPad.More",
-	name: "更多服务",
+	name: "[我的 iPad版] 更多服务",
 	type: "array",
 	boxJsType: "checkboxes",
 	defaultValue: ["797", "798"],
