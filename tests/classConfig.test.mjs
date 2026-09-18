@@ -16,6 +16,26 @@ test("Mine keeps configured services available after a request filters them out"
 	assert.ok(!next.sections_v2.some(section => section.items?.some(item => item.id === 129515498)));
 });
 
+test("Mine removes empty sections and keeps the Biliverse entry in more services", () => {
+	const data = {};
+	Mine.replaceSections(data, { CreatorCenter: [], Recommend: [], More: [] });
+	assert.ok(data.sections_v2.every(section => Array.isArray(section.items) && section.items.length > 0));
+	Mine.addEntry(data);
+	const more = data.sections_v2.find(({ title }) => title === "更多服务");
+	assert.deepEqual(
+		more.items.map(item => item.id),
+		[129515498],
+	);
+
+	const ipad = {};
+	Mine.replacePadSections(ipad, { Upper: [], Recommend: [], More: [] });
+	Mine.addEntry(ipad, true);
+	assert.deepEqual(
+		ipad.ipad_more_sections.map(item => item.id),
+		[129515498],
+	);
+});
+
 test("Region channel responses do not change subsequent region index responses", () => {
 	const settings = { Index: [1] };
 	const initial = Region.replaceIndex([], "/x/v2/region/index", settings);

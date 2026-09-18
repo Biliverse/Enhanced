@@ -1,4 +1,4 @@
-import { Console } from "@nsnanocat/util";
+import { Lodash as _, Console } from "@nsnanocat/util";
 
 /**
  * 我的页响应转换器。
@@ -326,7 +326,7 @@ export default class Mine {
 	 * @returns {void} 无返回值 / No return value.
 	 */
 	static replaceSections(data, settings, debug = false) {
-		data.sections_v2 = Mine.#Config.sections_v2.map(template => {
+		data.sections_v2 = Mine.#Config.sections_v2.flatMap(template => {
 			const section = { ...template, items: template.items.map(item => ({ ...item })) };
 			if (debug) Console.debug(`e.title = ${section.title}`);
 			switch (section.title) {
@@ -340,8 +340,7 @@ export default class Mine {
 					section.items = section.items.filter(item => settings.More.includes(item.id));
 					break;
 			}
-			if (!section.items.some(() => true)) return {};
-			return section;
+			return section.items.length ? [section] : [];
 		});
 	}
 
@@ -359,29 +358,40 @@ export default class Mine {
 	}
 
 	/**
-	 * 在原生设置入口之后写入 Biliverse 哔哩万象入口。
-	 * Insert the Biliverse entry after the native Settings entry.
+	 * 始终在更多服务中写入 Biliverse 哔哩万象入口。
+	 * Always insert the Biliverse entry into More Services.
 	 * @param {object} data - 我的页响应数据 / Mine page response data.
 	 * @param {boolean} ipad - 是否为 iPad 响应 / Whether this is an iPad response.
 	 * @returns {void} 无返回值 / No return value.
 	 */
 	static addEntry(data, ipad = false) {
-		const groups = ipad ? [data.ipad_upper_sections, data.ipad_recommend_sections, data.ipad_more_sections] : (data.sections_v2?.map(section => section.items) ?? []);
-		for (const items of groups) {
-			if (!Array.isArray(items)) continue;
+		const paths = ipad ? ["ipad_upper_sections", "ipad_recommend_sections", "ipad_more_sections"] : _.get(data, "sections_v2", []).map((_, index) => ["sections_v2", index, "items"]);
+		for (const path of paths) {
+			const items = _.get(data, path, []);
 			for (let index = items.length - 1; index >= 0; index--) {
 				if (items[index].id === 129515498 || items[index].uri === Mine.#Config.URI || [Mine.#Config.BaseURI, "https://biliverse.github.io/settings/"].includes(items[index].uri?.split(/[?#]/)[0])) items.splice(index, 1);
 			}
 		}
-		const items = groups.find(items => Array.isArray(items) && items.some(item => item.uri === Mine.#Config.SettingsURI));
-		if (!items) return;
+		let targetPath = "ipad_more_sections";
+		if (!ipad) {
+			const sections = _.get(data, "sections_v2", []);
+			let index = sections.findIndex(item => item.title === "更多服务");
+			if (index < 0) {
+				const template = Mine.#Config.sections_v2.find(item => item.title === "更多服务");
+				index = sections.length;
+				_.set(data, ["sections_v2", index], { ...template, items: [] });
+			}
+			targetPath = ["sections_v2", index, "items"];
+		}
+		const items = _.get(data, targetPath, []);
 		const settingsIndex = items.findIndex(item => item.uri === Mine.#Config.SettingsURI);
-		items.splice(settingsIndex + 1, 0, {
+		items.splice(settingsIndex < 0 ? items.length : settingsIndex + 1, 0, {
 			id: 129515498,
 			title: "Biliverse 哔哩万象",
 			icon: "https://biliverse.github.io/settings/assets/Biliverse_subject.png",
 			uri: Mine.#Config.URI,
 			common_op_item: {},
 		});
+		_.set(data, targetPath, items);
 	}
 }

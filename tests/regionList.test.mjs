@@ -171,6 +171,36 @@ test("Biliverse entry remains available when Mine customization is disabled", as
 	);
 });
 
+test("Biliverse entry remains in more services when Mine customization removes settings", async () => {
+	globalThis.$argument = { Storage: "PersistentStore", LogLevel: "OFF" };
+	Storage.setItem("@Biliverse.Enhanced.Settings", {
+		Mine: {
+			Switch: true,
+			CreatorCenter: [],
+			Recommend: [],
+			More: [407, 1028],
+			iPad: { Switch: true, Upper: [], Recommend: [], More: [797, 1070] },
+		},
+	});
+	const phoneResponse = await Response({ url: "https://app.bilibili.com/x/v2/account/mine", headers: {} }, { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: 0, data: {} }) });
+	const iPadResponse = await Response({ url: "https://app.bilibili.com/x/v2/account/mine/ipad", headers: {} }, { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: 0, data: {} }) });
+	const phoneData = JSON.parse(phoneResponse.body).data;
+	const iPadData = JSON.parse(iPadResponse.body).data;
+	const phoneItems = phoneData.sections_v2.flatMap(section => section.items);
+	const more = phoneData.sections_v2.find(section => section.title === "更多服务");
+
+	assert.ok(phoneData.sections_v2.every(section => Array.isArray(section.items) && section.items.length > 0));
+	assert.deepEqual(
+		more.items.map(item => item.id),
+		[407, 1028, 129515498],
+	);
+	assert.equal(phoneItems.filter(item => item.id === 129515498).length, 1);
+	assert.deepEqual(
+		iPadData.ipad_more_sections.map(item => item.id),
+		[797, 1070, 129515498],
+	);
+});
+
 test("RegionShortcut setting is used to build both shortcut icons and home tabs", async () => {
 	await Request({
 		method: "POST",
