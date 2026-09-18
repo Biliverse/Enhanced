@@ -326,22 +326,26 @@ export default class Mine {
 	 * @returns {void} 无返回值 / No return value.
 	 */
 	static replaceSections(data, settings, debug = false) {
-		data.sections_v2 = Mine.#Config.sections_v2.flatMap(template => {
-			const section = { ...template, items: template.items.map(item => ({ ...item })) };
-			if (debug) Console.debug(`e.title = ${section.title}`);
-			switch (section.title) {
-				case "创作中心":
-					section.items = section.items.filter(item => settings.CreatorCenter.includes(item.id));
-					break;
-				case "推荐服务":
-					section.items = section.items.filter(item => settings.Recommend.includes(item.id));
-					break;
-				case "更多服务":
-					section.items = section.items.filter(item => settings.More.includes(item.id));
-					break;
-			}
-			return section.items.length ? [section] : [];
-		});
+		_.set(
+			data,
+			"sections_v2",
+			Mine.#Config.sections_v2.flatMap(template => {
+				const section = { ...template, items: template.items.map(item => ({ ...item })) };
+				if (debug) Console.debug(`e.title = ${section.title}`);
+				switch (section.title) {
+					case "创作中心":
+						section.items = section.items.filter(item => _.get(settings, "CreatorCenter").includes(item.id));
+						break;
+					case "推荐服务":
+						section.items = section.items.filter(item => _.get(settings, "Recommend").includes(item.id));
+						break;
+					case "更多服务":
+						section.items = section.items.filter(item => _.get(settings, "More").includes(item.id));
+						break;
+				}
+				return section.items.length ? [section] : [];
+			}),
+		);
 	}
 
 	/**
@@ -352,9 +356,21 @@ export default class Mine {
 	 * @returns {void} 无返回值 / No return value.
 	 */
 	static replacePadSections(data, settings) {
-		data.ipad_upper_sections = Mine.#Config.ipad_upper_sections.filter(item => settings.Upper.includes(item.id));
-		data.ipad_recommend_sections = Mine.#Config.ipad_recommend_sections.filter(item => settings.Recommend.includes(item.id));
-		data.ipad_more_sections = Mine.#Config.ipad_more_sections.filter(item => settings.More.includes(item.id));
+		_.set(
+			data,
+			"ipad_upper_sections",
+			Mine.#Config.ipad_upper_sections.filter(item => _.get(settings, "Upper").includes(item.id)),
+		);
+		_.set(
+			data,
+			"ipad_recommend_sections",
+			Mine.#Config.ipad_recommend_sections.filter(item => _.get(settings, "Recommend").includes(item.id)),
+		);
+		_.set(
+			data,
+			"ipad_more_sections",
+			Mine.#Config.ipad_more_sections.filter(item => _.get(settings, "More").includes(item.id)),
+		);
 	}
 
 	/**
@@ -365,7 +381,8 @@ export default class Mine {
 	 * @returns {void} 无返回值 / No return value.
 	 */
 	static addEntry(data, ipad = false) {
-		const paths = ipad ? ["ipad_upper_sections", "ipad_recommend_sections", "ipad_more_sections"] : _.get(data, "sections_v2", []).map((_, index) => ["sections_v2", index, "items"]);
+		const sections = _.get(data, "sections_v2", []);
+		const paths = ipad ? ["ipad_upper_sections", "ipad_recommend_sections", "ipad_more_sections"] : sections.map((_item, index) => ["sections_v2", index, "items"]);
 		for (const path of paths) {
 			const items = _.get(data, path, []);
 			for (let index = items.length - 1; index >= 0; index--) {
@@ -374,7 +391,6 @@ export default class Mine {
 		}
 		let targetPath = "ipad_more_sections";
 		if (!ipad) {
-			const sections = _.get(data, "sections_v2", []);
 			let index = sections.findIndex(item => item.title === "更多服务");
 			if (index < 0) {
 				const template = Mine.#Config.sections_v2.find(item => item.title === "更多服务");

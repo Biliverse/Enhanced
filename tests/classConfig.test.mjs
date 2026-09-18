@@ -3,7 +3,31 @@ import test from "node:test";
 import { mineCreatorCenter, mineIPadMore, mineIPadRecommend, mineIPadUpper, mineMore, mineRecommend, regionIndex } from "../arguments-builder.full.config.ts";
 import Mine from "../src/class/Mine.mjs";
 import Region from "../src/class/Region.mjs";
+import Tab from "../src/class/Tab.mjs";
 import database from "../src/function/database.mjs";
+
+test("Tab writes every configured selection into empty response data", () => {
+	const data = {};
+	Tab.replace(data, database.Enhanced.Settings, database.Enhanced.Configs);
+
+	assert.equal(data.top_left, database.Enhanced.Configs.Tab.top_left.mine);
+	assert.deepEqual(
+		data.top.map(({ id }) => id),
+		database.Enhanced.Settings.Home.Top,
+	);
+	assert.deepEqual(
+		data.top_more.map(({ id }) => id),
+		database.Enhanced.Settings.Home.Top_more,
+	);
+	assert.deepEqual(
+		data.tab.map(({ id }) => String(id)),
+		database.Enhanced.Settings.Home.Tab,
+	);
+	assert.deepEqual(
+		data.bottom.map(({ id }) => id),
+		database.Enhanced.Settings.Bottom,
+	);
+});
 
 test("Mine keeps configured services available after a request filters them out", () => {
 	Mine.replaceSections({}, { CreatorCenter: [], Recommend: [], More: [] });
@@ -43,6 +67,19 @@ test("Region channel responses do not change subsequent region index responses",
 	assert.equal(expected.length, 1);
 	Region.replaceIndex([], "/x/v2/channel/region/list", settings);
 	assert.deepEqual(Region.replaceIndex([], "/x/v2/region/index", settings), expected);
+});
+
+test("Region creates missing groups and icon arrays from local configuration", () => {
+	const { RegionList } = database.Enhanced.Configs;
+	const contents = Region.mergeLists([{ title: "默认分区" }], RegionList);
+	assert.deepEqual(
+		contents.map(({ title }) => title),
+		RegionList.groups.map(({ title }) => title),
+	);
+	assert.deepEqual(
+		contents.find(({ title }) => title === "默认分区").icons.map(({ uniqueId }) => uniqueId),
+		RegionList.groups.find(({ title }) => title === "默认分区").ids,
+	);
 });
 
 test("persistent settings definitions match database defaults and class configs", () => {
