@@ -133,7 +133,7 @@ test("persistent settings definitions match database defaults and class configs"
 	);
 	const publicPhoneIds = new Set(phoneOptions.flatMap(([definition]) => definition.options.map(({ key }) => key)));
 	const internalPhoneIds = new Set(phone.sections_v2.flatMap(({ items }) => items.map(({ id }) => String(id))));
-	for (const id of ["396", "397", "398", "399", "3991", "3992", "404", "741", "407", "410"]) {
+	for (const id of ["396", "397", "398", "399", "3991", "3992", "533original", "404", "741", "407", "410"]) {
 		assert.ok(internalPhoneIds.has(id), `${id} must remain available for stored settings`);
 		assert.equal(publicPhoneIds.has(id), false, `${id} must stay hidden from new settings`);
 	}
@@ -154,6 +154,18 @@ test("persistent settings definitions match database defaults and class configs"
 			display: 1,
 			corner_pixel: 0,
 			biz_type: 0,
+		},
+	);
+	assert.deepEqual(
+		creatorCenter.items.find(({ id }) => id === "533original"),
+		{
+			id: "533original",
+			title: "任务中心",
+			uri: "https://member.bilibili.com/york/mission-center?navhide=1",
+			icon: "http://i0.hdslb.com/bfs/archive/ae18624fd2a7bdda6d95ca606d5e4cf2647bfa4d.png",
+			need_login: 1,
+			global_red_dot: 1,
+			display: 1,
 		},
 	);
 });

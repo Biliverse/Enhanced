@@ -159,6 +159,15 @@ export default class Mine {
 						biz_type: 0,
 					},
 					{
+						id: "533original",
+						title: "任务中心",
+						uri: "https://member.bilibili.com/york/mission-center?navhide=1",
+						icon: "http://i0.hdslb.com/bfs/archive/ae18624fd2a7bdda6d95ca606d5e4cf2647bfa4d.png",
+						need_login: 1,
+						global_red_dot: 1,
+						display: 1,
+					},
+					{
 						id: 707,
 						title: "主播中心",
 						icon: "http://i0.hdslb.com/bfs/feed-admin/48e17ccd0ce0cfc9c7826422d5e47ce98f064c2a.png",
