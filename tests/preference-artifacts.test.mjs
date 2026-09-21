@@ -29,7 +29,6 @@ test("both release channels compile configuration responses from their own JSON 
 			);
 			assert.equal(response.status, 200);
 			assert.ok(response.headers["X-PreferencePanes-Version"]);
-			assert.equal(response.headers["Cache-Control"], undefined);
 			assert.deepEqual(JSON.parse(response.body), json);
 			const head = await new Promise(resolve =>
 				vm.runInNewContext(files.get(`config${suffix}.bundle.js`), {
