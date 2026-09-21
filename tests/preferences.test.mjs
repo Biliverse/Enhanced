@@ -69,6 +69,7 @@ test("settings integration maps static page assets and installs only the storage
 		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
 		assert.ok(template.includes("https://github.com/NSNanoCat/PreferencePanes/releases/latest/download/api.js"), name);
 		assert.doesNotMatch(template, /PreferencePanes\.Web|download\/web\.js/, name);
+		assert.doesNotMatch(template, /Cache-Control(?::|"\s*,\s*")\s*no-store/i, name);
 		for (const file of ["index.html", "index.mjs", "navigation.mjs"]) assert.equal((template.match(new RegExp(`https:\\/\\/github\\.com\\/NSNanoCat\\/PreferencePanes\\/releases\\/latest\\/download\\/${file.replace(".", "\\.")}`, "g")) ?? []).length, 1, `${name}: ${file}`);
 		assert.ok(template.includes("api\\/(?:get|set|delete)"), name);
 		assert.doesNotMatch(template, /settings\/mock\.js|Biliverse\.Website/, name);
@@ -149,12 +150,11 @@ test("Loon uses URL-backed response mocks", async () => {
 			assert.match(line, /^response if \$\{url\} ~= \/\^https:/, name);
 			assert.match(line, /, 200\)/, name);
 		}
-		assert.equal((template.match(/response\.header\.add\("Cache-Control", "no-store"\)/g) ?? []).length, 11, name);
 		assert.ok(
 			mocks.some(line => line.includes('response.body.mock_file("css", "https://biliverse.github.io/settings/theme.css", 200)')),
 			name,
 		);
-		assert.match(template, /response\.header\.add\(\["X-PreferencePanes-Version", "Cache-Control"\], \["\{\{version\}\}", "no-store"\]\)/, name);
+		assert.match(template, /response\.header\.add\("X-PreferencePanes-Version", "\{\{version\}\}"\)/, name);
 	}
 });
 
@@ -163,7 +163,7 @@ test("static resources use platform file mappings without a website script", asy
 	const preferenceFiles = ["index.html", "index.mjs", "navigation.mjs"];
 	for (const name of ["surge.handlebars", "surge.dev.handlebars"]) {
 		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
-		assert.match(template, /data-type=file data="https:\/\/biliverse\.github\.io\/settings\/theme\.css" status-code=200 header="Content-Type:text\/css\|Cache-Control:no-store"/, name);
+		assert.match(template, /data-type=file data="https:\/\/biliverse\.github\.io\/settings\/theme\.css" status-code=200 header="Content-Type:text\/css"/, name);
 	}
 	for (const name of ["stash.handlebars", "stash.dev.handlebars"]) {
 		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
@@ -210,7 +210,7 @@ test("Quantumult X maps every static asset to its matching response file", async
 			["https://app.bilibili.com/settings/assets/Redirect_subject.png?v=1", "image/png", "assets/Redirect_subject.png"],
 			["https://app.bilibili.com/settings/assets/ADBlock_subject.png?v=1", "image/png", "assets/ADBlock_subject.png"],
 		]) {
-			const line = mocks.find(line => line.includes(`url echo-response ${type}\\r\\nCache-Control: no-store echo-response https://biliverse.github.io/settings/${file}`));
+			const line = mocks.find(line => line.includes(`url echo-response ${type} echo-response https://biliverse.github.io/settings/${file}`));
 			assert.ok(line, `${name}: ${file}`);
 			assert.match(request, new RegExp(extractTemplatePattern(name, line)), `${name}: ${request}`);
 		}
@@ -219,11 +219,11 @@ test("Quantumult X maps every static asset to its matching response file", async
 			["https://app.bilibili.com/settings/assets/index.mjs?v=1", "text/javascript", "index.mjs"],
 			["https://app.bilibili.com/settings/assets/navigation.mjs?v=1", "text/javascript", "navigation.mjs"],
 		]) {
-			const line = mocks.find(line => line.includes(`url echo-response ${type}\\r\\nCache-Control: no-store echo-response https://github.com/NSNanoCat/PreferencePanes/releases/latest/download/${file}`));
+			const line = mocks.find(line => line.includes(`url echo-response ${type} echo-response https://github.com/NSNanoCat/PreferencePanes/releases/latest/download/${file}`));
 			assert.ok(line, `${name}: ${file}`);
 			assert.match(request, new RegExp(extractTemplatePattern(name, line)), `${name}: ${request}`);
 		}
-		assert.match(mocks.at(-1), /url echo-response application\/json\\r\\nX-PreferencePanes-Version: \{\{version\}\}\\r\\nCache-Control: no-store echo-response https:\/\//, name);
+		assert.match(mocks.at(-1), /url echo-response application\/json\\r\\nX-PreferencePanes-Version: \{\{version\}\} echo-response https:\/\//, name);
 		assert.doesNotMatch(template, /url script-echo-response https:\/\/biliverse\.github\.io\/settings\/mock\.js/, name);
 		assert.doesNotMatch(mocks.at(-1), /config(?:\.dev)?\.bundle\.js/, name);
 	}
