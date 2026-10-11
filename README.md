@@ -42,17 +42,19 @@ Enhanced 为 BiliBili 提供首页、分区页、我的页面及底部导航栏�
 
 两份配置均随正式版 Release 发布。开发版分别输出 `Biliverse.Enhanced.dev.BoxJS.json` 和 `Biliverse.Enhanced.dev.PreferencePanes.json` 到现有 Gist。模板引用与业务脚本相同版本的发布地址，`biliverse.github.io` 不托管配置快照。
 
-App 中的 Biliverse 入口由 Enhanced 注入，地址为 [本地设置](https://biliverse.github.io/settings/)。完整页面接入和读写说明见托管仓库的 `settings/README.md`。
+App 中的 Biliverse 入口由 Enhanced 注入，地址为 [本地设置](https://biliverse.github.io/settings/)。完整页面接入和读写说明见托管仓库的 `README.md`。
 
 ## 模板与 Mock
 
-模板将当前版本的 BoxJS JSON Mock 到 `/api/Enhanced`，逐文件映射 PreferencePanes 的静态模块 HTML、页面入口和导航组件，并安装固定存储 API。
+模板将当前版本的 BoxJS JSON Mock 到 `/api/Enhanced`，映射 PreferencePanes 的内联首页和 Biliverse 内容资源，并安装固定存储 API。
 
 Surge 和 Loon 使用原生远程 JSON Mock：先拉取同版本远程资源，再将其作为本地响应。Loon 使用旧版 URL `data-path` 响应 Mock。其它平台由 `config[.dev].bundle.js` 返回同版本 JSON。
 
-`/settings/{module}`、`/settings/assets/index.mjs`、`/settings/assets/navigation.mjs` 分别映射 PreferencePanes Release 的 `index.html`、`index.mjs`、`navigation.mjs`，不执行页面响应脚本。Enhanced 安装的 `api.js` 只处理固定的 `POST /api/get|set|delete`；`/api/Enhanced` 由 Enhanced 模块直接返回 BoxJS 配置。
+`/settings/` 映射 PreferencePanes 的内联 `home.html`；模块和字段子页直接在同一文档中渲染，不再映射模块 HTML 或 JS。Enhanced 安装的 `api.js` 只处理固定的 `POST /api/get|set|delete`；`/api/Enhanced` 由 Enhanced 模块直接返回 BoxJS 配置。
 
-设置请求同时匹配 `biliverse.github.io` 与 `app.bilibili.com`。Global、Redirect 和 ADBlock 不携带设置前端规则。Enhanced 还将 Biliverse 主页、`theme.css`、唯一的 `index.mjs` 和五张透明前景图标逐文件映射到 `app.bilibili.com`；请求地址与 `biliverse.github.io` 上的真实文件地址保持分离，避免远程资源自引用。
+设置 API 同时匹配 `biliverse.github.io` 与 `app.bilibili.com`。Enhanced 唯一映射共用首页、Biliverse 的 `home.json`、`theme.css`、`bridge.mjs` 与五张透明前景图标；请求地址与网站真实文件地址保持分离，避免远程资源自引用。Global、Redirect 和 ADBlock 只提供各自配置。
+
+单文档模板使用 PreferencePanes 1.3.1 框架，开发产物与 Biliverse 站点同步更新。
 
 ## 设置 API 与存储
 
