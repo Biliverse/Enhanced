@@ -22,14 +22,14 @@ http:
     - "grpc.biliapi.net"
   url-rewrite:
     - ^https:\/\/app\.bilibili\.com\/settings\/(?:\?[^#]*)?$ https://github.com/NSNanoCat/PreferencePanes/releases/latest/download/home.html transparent
-    - ^https:\/\/app\.bilibili\.com\/settings\/theme\.css(?:\?[^#]*)?$ https://biliverse.github.io/settings/theme.css transparent
-    - ^https:\/\/app\.bilibili\.com\/settings\/home\.json(?:\?[^#]*)?$ https://biliverse.github.io/settings/home.json transparent
-    - ^https:\/\/app\.bilibili\.com\/settings\/bridge\.mjs(?:\?[^#]*)?$ https://biliverse.github.io/settings/bridge.mjs transparent
-    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/Biliverse_subject\.png(?:\?[^#]*)?$ https://biliverse.github.io/settings/assets/Biliverse_subject.png transparent
-    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/Enhanced_subject\.png(?:\?[^#]*)?$ https://biliverse.github.io/settings/assets/Enhanced_subject.png transparent
-    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/Global_subject\.png(?:\?[^#]*)?$ https://biliverse.github.io/settings/assets/Global_subject.png transparent
-    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/Redirect_subject\.png(?:\?[^#]*)?$ https://biliverse.github.io/settings/assets/Redirect_subject.png transparent
-    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/ADBlock_subject\.png(?:\?[^#]*)?$ https://biliverse.github.io/settings/assets/ADBlock_subject.png transparent
+    - ^https:\/\/app\.bilibili\.com\/settings\/theme\.css(?:\?[^#]*)?$ https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/theme.css transparent
+    - ^https:\/\/app\.bilibili\.com\/settings\/home\.json(?:\?[^#]*)?$ https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/home.json transparent
+    - ^https:\/\/app\.bilibili\.com\/settings\/bridge\.mjs(?:\?[^#]*)?$ https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/bridge.mjs transparent
+    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/Biliverse_subject\.png(?:\?[^#]*)?$ https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/Biliverse_subject.png transparent
+    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/Enhanced_subject\.png(?:\?[^#]*)?$ https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/Enhanced_subject.png transparent
+    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/Global_subject\.png(?:\?[^#]*)?$ https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/Global_subject.png transparent
+    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/Redirect_subject\.png(?:\?[^#]*)?$ https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/Redirect_subject.png transparent
+    - ^https:\/\/app\.bilibili\.com\/settings\/assets\/ADBlock_subject\.png(?:\?[^#]*)?$ https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/ADBlock_subject.png transparent
   script:
     - match: ^https:\/\/(?:biliverse\.github\.io|app\.bilibili\.com)\/api\/(?:get|set|delete)(?:\?.*)?$
       name: PreferencePanes.API

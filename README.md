@@ -42,7 +42,7 @@ Enhanced 为 BiliBili 提供首页、分区页、我的页面及底部导航栏�
 
 两份配置均随正式版 Release 发布。开发版分别输出 `Biliverse.Enhanced.dev.BoxJS.json` 和 `Biliverse.Enhanced.dev.PreferencePanes.json` 到现有 Gist。模板引用与业务脚本相同版本的发布地址，`biliverse.github.io` 不托管配置快照。
 
-App 中的 Biliverse 入口由 Enhanced 注入，地址为 [本地设置](https://biliverse.github.io/settings/)。完整页面接入和读写说明见托管仓库的 `README.md`。
+App 中的 Biliverse 入口由 Enhanced 注入，通过 Common WebView 打开 `https://app.bilibili.com/settings/`。完整页面接入和读写说明见托管仓库的 `README.md`。
 
 ## 模板与 Mock
 
@@ -54,7 +54,9 @@ Surge 和 Loon 使用原生远程 JSON Mock：先拉取同版本远程资源，�
 
 设置 API 同时匹配 `biliverse.github.io` 与 `app.bilibili.com`。Enhanced 唯一映射共用首页、Biliverse 的 `home.json`、`theme.css`、`bridge.mjs` 与五张透明前景图标；请求地址与网站真实文件地址保持分离，避免远程资源自引用。Global、Redirect 和 ADBlock 只提供各自配置。
 
-单文档模板使用 PreferencePanes 1.3.1 框架，开发产物与 Biliverse 站点同步更新。
+共用 `home.html` 和 `api.js` 使用 PreferencePanes 的 `releases/latest/download/`，独立获取最新正式版。专用 `home.json`、`theme.css`、`bridge.mjs` 和五张图标随 Enhanced 当前版本 Release 发布，模板与业务脚本一样引用 `releases/download/v<Enhanced 版本>/`。
+
+`package.json` 的 `preferencePanesContentRevision` 固定 Biliverse.github.io 内容源码的完整提交号；构建从该提交读取上述八个文件并原样打包，不复制维护另一套源码。变更专用内容时更新该提交号。开发版三个文本文件加入现有 Gist，与脚本、配置和订阅一次更新；图片指向同一源码提交的原始文件，不引用浮动网站资源。公共 HTML 和 API 不进入 Enhanced 产物。
 
 ## 设置 API 与存储
 
