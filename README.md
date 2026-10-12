@@ -56,7 +56,7 @@ Surge 和 Loon 使用原生远程 JSON Mock：先拉取同版本远程资源，�
 
 共用 `home.html` 和 `api.js` 使用 PreferencePanes 的 `releases/latest/download/`，独立获取最新正式版。专用 `home.json`、`theme.css`、`bridge.mjs` 和五张图标随 Enhanced 当前版本 Release 发布，模板与业务脚本一样引用 `releases/download/v<Enhanced 版本>/`。
 
-`package.json` 的 `preferencePanesContentRevision` 固定 Biliverse.github.io 内容源码的完整提交号；构建从该提交读取上述八个文件并原样打包，不复制维护另一套源码。变更专用内容时更新该提交号。开发版三个文本文件加入现有 Gist，与脚本、配置和订阅一次更新；图片指向同一源码提交的原始文件，不引用浮动网站资源。公共 HTML 和 API 不进入 Enhanced 产物。
+`package.json` 的 `preferencePanesContentRevision` 固定 Biliverse.github.io 内容源码的完整提交号；正式／开发 workflow checkout 该提交，仅复制上述八个文件到 `dist`，不复制维护另一套源码。变更专用内容时更新该提交号。开发版三个文本文件加入现有 Gist，与脚本、配置和订阅一次更新；图片指向同一源码提交的原始文件，不引用浮动网站资源。公共 HTML 和 API、Bilibili 官方 SDK 与官方 CSS 不进入 Enhanced 产物。
 
 ## 设置 API 与存储
 
