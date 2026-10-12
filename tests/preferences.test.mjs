@@ -23,12 +23,6 @@ function extractTemplatePattern(name, line) {
 	return line.match(/(?:http-request )?(\^https[^ ]+)/)[1];
 }
 
-function settingsResourceURL(name, file) {
-	if (!name.includes(".dev.")) return `https://github.com/Biliverse/Enhanced/releases/download/v{{@package 'version'}}/${file.split("/").at(-1)}`;
-	if (file.startsWith("assets/")) return `https://raw.githubusercontent.com/Biliverse/Biliverse.github.io/{{@package 'preferencePanesContentRevision'}}/settings/${file}`;
-	return `https://gist.githubusercontent.com/VirgilClyne/97d7611df1c0b29a254ce8f527137576/raw/${file}`;
-}
-
 test("BoxJS paths match the persistence consumed by business requests", async () => {
 	assert.ok(config.every(field => field.id.startsWith("@Biliverse.Enhanced.Settings.")));
 	const storage = config.find(field => field.id === "@Biliverse.Enhanced.Settings.Storage");
@@ -82,8 +76,7 @@ test("settings integration maps static page assets and installs only the storage
 		assert.doesNotMatch(template, /assets\\\/(?:index\|host|host\|index)\)\\\.mjs/);
 		assert.doesNotMatch(template, /Enhanced\.request\.js|PreferencePanes\.request\.js|settings\/assets\/index\.html/);
 		for (const file of ["home.json", "theme.css", "bridge.mjs", ...["Biliverse", "Enhanced", "Global", "Redirect", "ADBlock"].map(module => `assets/${module}_subject.png`)])
-			assert.ok(template.includes(settingsResourceURL(name, file)), `${name}: ${file}`);
-		assert.doesNotMatch(template, /https:\/\/biliverse\.github\.io\/settings\/(?:home\.json|theme\.css|bridge\.mjs|assets\/)/, name);
+			assert.ok(template.includes(`https://biliverse.github.io/settings/${file}`), `${name}: ${file}`);
 		const line = template.split("\n").find(line => line.includes("api") && line.includes("Enhanced") && line.includes("biliverse"));
 		assert.ok(line, name);
 		const pattern = extractTemplatePattern(name, line);
@@ -129,8 +122,10 @@ test("homepage and static mocks never overlap module pages, configs or storage A
 		);
 		const patterns = candidates.map(line => new RegExp(extractTemplatePattern(name, line)));
 		assert.equal(patterns.length, 9, name);
-		for (const pathname of ["/settings/", "/settings/home.json", "/settings/theme.css", "/settings/bridge.mjs", "/settings/assets/Enhanced_subject.png"]) assert.equal(patterns.filter(pattern => pattern.test(`https://app.bilibili.com${pathname}?v=1`)).length, 1, name);
-		assert.equal(patterns.filter(pattern => pattern.test("https://biliverse.github.io/settings/theme.css?v=0.9.10")).length, 0, name);
+		for (const pathname of ["/settings/", "/settings/home.json", "/settings/theme.css", "/settings/bridge.mjs", ...["Biliverse", "Enhanced", "Global", "Redirect", "ADBlock"].map(module => `/settings/assets/${module}_subject.png`)]) {
+			assert.equal(patterns.filter(pattern => pattern.test(`https://app.bilibili.com${pathname}?v=1`)).length, 1, `${name}: ${pathname}`);
+			assert.equal(patterns.some(pattern => pattern.test(`https://biliverse.github.io${pathname}?v=1`)), false, `${name}: source ${pathname}`);
+		}
 		for (const pathname of ["/settings/assets/Enhanced_subject_dark.png", "/settings/assets/Enhanced_subject_light.png"])
 			assert.equal(
 				patterns.some(pattern => pattern.test(`https://app.bilibili.com${pathname}`)),
@@ -157,7 +152,7 @@ test("Loon uses URL-backed response mocks", async () => {
 		}
 		assert.equal((template.match(/response\.header\.add\("Cache-Control", "no-store"\)/g) ?? []).length, 9, name);
 		assert.ok(
-			mocks.some(line => line.includes(`response.body.mock_file("css", "${settingsResourceURL(name, "theme.css")}", 200)`)),
+			mocks.some(line => line.includes('response.body.mock_file("css", "https://biliverse.github.io/settings/theme.css", 200)')),
 			name,
 		);
 		assert.match(template, /response\.header\.add\(\["X-PreferencePanes-Version", "Cache-Control"\], \["\{\{version\}\}", "no-store"\]\)/, name);
@@ -170,7 +165,7 @@ test("static resources use platform file mappings without a website script", asy
 	for (const name of ["surge.handlebars", "surge.dev.handlebars"]) {
 		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
 		const css = template.split("\n").find(line => line.includes('header="Content-Type:text/css'));
-		assert.ok(css.includes(`data="${settingsResourceURL(name, "theme.css")}"`), name);
+		assert.ok(css.includes('data="https://biliverse.github.io/settings/theme.css"'), name);
 	}
 	for (const name of ["stash.handlebars", "stash.dev.handlebars"]) {
 		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
@@ -178,7 +173,7 @@ test("static resources use platform file mappings without a website script", asy
 		assert.equal(rewrites.length, files.length + preferenceFiles.length, name);
 		for (const file of files)
 			assert.ok(
-				rewrites.some(line => line.endsWith(`${settingsResourceURL(name, file)} transparent`)),
+				rewrites.some(line => line.endsWith(`https://biliverse.github.io/settings/${file} transparent`)),
 				`${name}: ${file}`,
 			);
 		for (const file of preferenceFiles)
@@ -192,7 +187,7 @@ test("static resources use platform file mappings without a website script", asy
 	assert.equal(mappings.length, files.length + preferenceFiles.length);
 	for (const file of files)
 		assert.ok(
-			mappings.some(line => line.includes(`data="${settingsResourceURL("shadowrocket.handlebars", file)}"`)),
+			mappings.some(line => line.includes(`data="https://biliverse.github.io/settings/${file}"`)),
 			file,
 		);
 	for (const file of preferenceFiles)
@@ -217,7 +212,7 @@ test("Quantumult X maps every static asset to its matching response file", async
 			["https://app.bilibili.com/settings/assets/Redirect_subject.png?v=1", "image/png", "assets/Redirect_subject.png"],
 			["https://app.bilibili.com/settings/assets/ADBlock_subject.png?v=1", "image/png", "assets/ADBlock_subject.png"],
 		]) {
-			const line = mocks.find(line => line.includes(`url echo-response ${type} echo-response ${settingsResourceURL(name, file)}`));
+			const line = mocks.find(line => line.includes(`url echo-response ${type} echo-response https://biliverse.github.io/settings/${file}`));
 			assert.ok(line, `${name}: ${file}`);
 			assert.match(request, new RegExp(extractTemplatePattern(name, line)), `${name}: ${request}`);
 		}

@@ -22,20 +22,6 @@ jobs:
         with:
           package-token: ${{ secrets.PACKAGE_TOKEN }}
           build-command: npm run dev
-      - name: Read Settings Content Revision
-        id: settings-content
-        run: echo "revision=$(node -p 'require("./package.json").preferencePanesContentRevision')" >> "$GITHUB_OUTPUT"
-      - name: Checkout Settings Content
-        uses: actions/checkout@v7
-        with:
-          repository: Biliverse/Biliverse.github.io
-          ref: ${{ steps.settings-content.outputs.revision }}
-          path: settings-content
-          sparse-checkout: settings
-      - name: Copy Settings Content
-        run: |
-          cp settings-content/settings/{home.json,theme.css,bridge.mjs} dist/
-          cp settings-content/settings/assets/{Biliverse,Enhanced,Global,Redirect,ADBlock}_subject.png dist/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v7
         with:

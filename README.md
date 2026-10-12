@@ -54,9 +54,9 @@ Surge 和 Loon 使用原生远程 JSON Mock：先拉取同版本远程资源，�
 
 设置 API 同时匹配 `biliverse.github.io` 与 `app.bilibili.com`。Enhanced 唯一映射共用首页、Biliverse 的 `home.json`、`theme.css`、`bridge.mjs` 与五张透明前景图标；请求地址与网站真实文件地址保持分离，避免远程资源自引用。Global、Redirect 和 ADBlock 只提供各自配置。
 
-共用 `home.html` 和 `api.js` 使用 PreferencePanes 的 `releases/latest/download/`，独立获取最新正式版。专用 `home.json`、`theme.css`、`bridge.mjs` 和五张图标随 Enhanced 当前版本 Release 发布，模板与业务脚本一样引用 `releases/download/v<Enhanced 版本>/`。
+共用 `home.html` 和 `api.js` 使用 PreferencePanes 的 `releases/latest/download/`，独立获取最新正式版。正式／开发模板的 `home.json`、`theme.css`、`bridge.mjs` 和五张图标均直接引用 `https://biliverse.github.io/settings/` 下的对应文件；静态 Mock 仅匹配 `app.bilibili.com` 的虚拟入口，不拦截官网资源地址。
 
-`package.json` 的 `preferencePanesContentRevision` 固定 Biliverse.github.io 内容源码的完整提交号；正式／开发 workflow checkout 该提交，仅复制上述八个文件到 `dist`，不复制维护另一套源码。变更专用内容时更新该提交号。开发版三个文本文件加入现有 Gist，与脚本、配置和订阅一次更新；图片指向同一源码提交的原始文件，不引用浮动网站资源。公共 HTML 和 API、Bilibili 官方 SDK 与官方 CSS 不进入 Enhanced 产物。
+Enhanced 构建不拉取网站源码，也不打包前端资源。业务脚本和配置仍按现有 tag／Gist 流程发布；Bilibili 官方 SDK 与官方 CSS 继续由页面直接引用。
 
 ## 设置 API 与存储
 
