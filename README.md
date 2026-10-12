@@ -52,9 +52,9 @@ Surge 和 Loon 使用原生远程 JSON Mock：先拉取同版本远程资源，�
 
 `/settings/` 映射 PreferencePanes 的内联 `home.html`；模块和字段子页直接在同一文档中渲染，不再映射模块 HTML 或 JS。Enhanced 安装的 `api.js` 只处理固定的 `POST /api/get|set|delete`；`/api/Enhanced` 由 Enhanced 模块直接返回 BoxJS 配置。
 
-设置 API 同时匹配 `biliverse.github.io` 与 `app.bilibili.com`。Enhanced 唯一映射共用首页、Biliverse 的 `home.json`、`theme.css`、`bridge.mjs` 与五张透明前景图标；请求地址与网站真实文件地址保持分离，避免远程资源自引用。Global、Redirect 和 ADBlock 只提供各自配置。
+设置 API 同时匹配 `biliverse.github.io` 与 `app.bilibili.com`。Enhanced 唯一映射共用首页、Biliverse 的 `home.json`、`theme.css` 和 `bridge.mjs`；请求地址与网站真实文件地址保持分离，避免远程资源自引用。Global、Redirect 和 ADBlock 只提供各自配置。
 
-共用 `home.html` 和 `api.js` 使用 PreferencePanes 的 `releases/latest/download/`，独立获取最新正式版。正式／开发模板的 `home.json`、`theme.css`、`bridge.mjs` 和五张图标均直接引用 `https://biliverse.github.io/settings/` 下的对应文件；静态 Mock 仅匹配 `app.bilibili.com` 的虚拟入口，不拦截官网资源地址。
+共用 `home.html` 和 `api.js` 使用 PreferencePanes 的 `releases/latest/download/`，独立获取最新正式版。正式／开发模板的 `home.json`、`theme.css` 和 `bridge.mjs` 直接引用 `https://biliverse.github.io/settings/` 下的对应文件；静态 Mock 仅匹配 `app.bilibili.com` 的虚拟入口，不拦截官网资源地址。五张图标由 JSON 中的官网完整 URL 直接加载，不设置图标 Mock。
 
 Enhanced 构建不拉取网站源码，也不打包前端资源。业务脚本和配置仍按现有 tag／Gist 流程发布；Bilibili 官方 SDK 与官方 CSS 继续由页面直接引用。
 

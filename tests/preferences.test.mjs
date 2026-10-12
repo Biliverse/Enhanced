@@ -75,7 +75,7 @@ test("settings integration maps static page assets and installs only the storage
 		assert.doesNotMatch(template, /api\\\/\(\?:get\|set\|delete\)\|settings/);
 		assert.doesNotMatch(template, /assets\\\/(?:index\|host|host\|index)\)\\\.mjs/);
 		assert.doesNotMatch(template, /Enhanced\.request\.js|PreferencePanes\.request\.js|settings\/assets\/index\.html/);
-		for (const file of ["home.json", "theme.css", "bridge.mjs", ...["Biliverse", "Enhanced", "Global", "Redirect", "ADBlock"].map(module => `assets/${module}_subject.png`)])
+		for (const file of ["home.json", "theme.css", "bridge.mjs"])
 			assert.ok(template.includes(`https://biliverse.github.io/settings/${file}`), `${name}: ${file}`);
 		const line = template.split("\n").find(line => line.includes("api") && line.includes("Enhanced") && line.includes("biliverse"));
 		assert.ok(line, name);
@@ -121,12 +121,12 @@ test("homepage and static mocks never overlap module pages, configs or storage A
 				(line.trimStart().startsWith("^https") || line.startsWith("http-request ") || line.startsWith("response if") || line.trimStart().startsWith("- match:") || line.trimStart().startsWith("- ^https") || line.includes("pattern=")),
 		);
 		const patterns = candidates.map(line => new RegExp(extractTemplatePattern(name, line)));
-		assert.equal(patterns.length, 9, name);
-		for (const pathname of ["/settings/", "/settings/home.json", "/settings/theme.css", "/settings/bridge.mjs", ...["Biliverse", "Enhanced", "Global", "Redirect", "ADBlock"].map(module => `/settings/assets/${module}_subject.png`)]) {
+		assert.equal(patterns.length, 4, name);
+		for (const pathname of ["/settings/", "/settings/home.json", "/settings/theme.css", "/settings/bridge.mjs"]) {
 			assert.equal(patterns.filter(pattern => pattern.test(`https://app.bilibili.com${pathname}?v=1`)).length, 1, `${name}: ${pathname}`);
 			assert.equal(patterns.some(pattern => pattern.test(`https://biliverse.github.io${pathname}?v=1`)), false, `${name}: source ${pathname}`);
 		}
-		for (const pathname of ["/settings/assets/Enhanced_subject_dark.png", "/settings/assets/Enhanced_subject_light.png"])
+		for (const pathname of [...["Biliverse", "Enhanced", "Global", "Redirect", "ADBlock"].map(module => `/settings/assets/${module}_subject.png`), "/settings/assets/Enhanced_subject_dark.png", "/settings/assets/Enhanced_subject_light.png"])
 			assert.equal(
 				patterns.some(pattern => pattern.test(`https://app.bilibili.com${pathname}`)),
 				false,
@@ -145,12 +145,12 @@ test("Loon uses URL-backed response mocks", async () => {
 	for (const name of ["loon.handlebars", "loon.dev.handlebars"]) {
 		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
 		const mocks = template.split("\n").filter(line => line.includes("response.body.mock_file"));
-		assert.equal(mocks.length, 10, name);
+		assert.equal(mocks.length, 5, name);
 		for (const line of mocks) {
 			assert.match(line, /^response if \$\{url\} ~= \/\^https:/, name);
 			assert.match(line, /, 200\)/, name);
 		}
-		assert.equal((template.match(/response\.header\.add\("Cache-Control", "no-store"\)/g) ?? []).length, 9, name);
+		assert.equal((template.match(/response\.header\.add\("Cache-Control", "no-store"\)/g) ?? []).length, 4, name);
 		assert.ok(
 			mocks.some(line => line.includes('response.body.mock_file("css", "https://biliverse.github.io/settings/theme.css", 200)')),
 			name,
@@ -160,7 +160,7 @@ test("Loon uses URL-backed response mocks", async () => {
 });
 
 test("static resources use platform file mappings without a website script", async () => {
-	const files = ["home.json", "theme.css", "bridge.mjs", ...["Biliverse", "Enhanced", "Global", "Redirect", "ADBlock"].map(name => `assets/${name}_subject.png`)];
+	const files = ["home.json", "theme.css", "bridge.mjs"];
 	const preferenceFiles = ["home.html"];
 	for (const name of ["surge.handlebars", "surge.dev.handlebars"]) {
 		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
@@ -201,16 +201,11 @@ test("Quantumult X maps every static asset to its matching response file", async
 	for (const name of ["quantumultx.handlebars", "quantumultx.dev.handlebars"]) {
 		const template = await readFile(new URL(`../template/${name}`, import.meta.url), "utf8");
 		const mocks = template.split("\n").filter(line => line.includes(" url echo-response "));
-		assert.equal(mocks.length, 10, name);
+		assert.equal(mocks.length, 5, name);
 		for (const [request, type, file] of [
 			["https://app.bilibili.com/settings/theme.css?v=1", "text/css", "theme.css"],
 			["https://app.bilibili.com/settings/home.json?v=1", "application/json", "home.json"],
 			["https://app.bilibili.com/settings/bridge.mjs?v=1", "text/javascript", "bridge.mjs"],
-			["https://app.bilibili.com/settings/assets/Biliverse_subject.png?v=1", "image/png", "assets/Biliverse_subject.png"],
-			["https://app.bilibili.com/settings/assets/Enhanced_subject.png?v=1", "image/png", "assets/Enhanced_subject.png"],
-			["https://app.bilibili.com/settings/assets/Global_subject.png?v=1", "image/png", "assets/Global_subject.png"],
-			["https://app.bilibili.com/settings/assets/Redirect_subject.png?v=1", "image/png", "assets/Redirect_subject.png"],
-			["https://app.bilibili.com/settings/assets/ADBlock_subject.png?v=1", "image/png", "assets/ADBlock_subject.png"],
 		]) {
 			const line = mocks.find(line => line.includes(`url echo-response ${type} echo-response https://biliverse.github.io/settings/${file}`));
 			assert.ok(line, `${name}: ${file}`);
