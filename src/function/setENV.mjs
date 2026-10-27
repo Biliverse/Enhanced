@@ -15,9 +15,9 @@ export default function setENV(name, platforms, database) {
 	const storedSettings = Storage.getItem(`@${name}.${platforms}.Settings`, {});
 	globalThis.$argument.Storage = storedSettings.Storage ?? argumentStorage;
 	const { Settings, Caches, Configs } = getStorage(name, platforms, database);
-	// App 内保存的标签页顺序是运行时权威值，不受模块参数的配置优先级覆盖。
-	// The tab order saved in-app is authoritative at runtime and overrides module argument precedence.
-	if (Reflect.has(storedSettings.Home ?? {}, "Tab")) _.set(Settings, "Home.Tab", storedSettings.Home.Tab);
+	// App 内保存的标签页顺序是运行时权威值，不受模块参数的配置优先级覆盖；旧版数据以逗号分隔字符串保存，需与 getStorage 的解析方式保持一致。
+	// The tab order saved in-app is authoritative at runtime and overrides module argument precedence; legacy data is stored as a comma-separated string and must be parsed the same way getStorage does.
+	if (Reflect.has(storedSettings.Home ?? {}, "Tab")) _.set(Settings, "Home.Tab", typeof storedSettings.Home.Tab === "string" ? storedSettings.Home.Tab.split(",").filter(Boolean) : storedSettings.Home.Tab);
 	globalThis.$argument.Storage = argumentStorage;
 	/***************** Settings *****************/
 	// 单值或空值转换为数组
