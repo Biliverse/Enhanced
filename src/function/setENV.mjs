@@ -1,4 +1,4 @@
-import { Lodash as _, Console, Storage } from "@nsnanocat/util";
+import { Lodash as _, Console } from "@nsnanocat/util";
 import getStorage from "@nsnanocat/util/getStorage.mjs";
 
 /**
@@ -11,14 +11,7 @@ import getStorage from "@nsnanocat/util/getStorage.mjs";
  */
 export default function setENV(name, platforms, database) {
 	Console.log("☑️ Set Environment Variables");
-	const argumentStorage = globalThis.$argument.Storage;
-	const storedSettings = Storage.getItem(`@${name}.${platforms}.Settings`, {});
-	globalThis.$argument.Storage = storedSettings.Storage ?? argumentStorage;
 	const { Settings, Caches, Configs } = getStorage(name, platforms, database);
-	// App 内保存的标签页顺序是运行时权威值，不受模块参数的配置优先级覆盖。
-	// The tab order saved in-app is authoritative at runtime and overrides module argument precedence.
-	if (Reflect.has(storedSettings.Home ?? {}, "Tab")) _.set(Settings, "Home.Tab", storedSettings.Home.Tab);
-	globalThis.$argument.Storage = argumentStorage;
 	/***************** Settings *****************/
 	// 单值或空值转换为数组
 	if (!Array.isArray(Settings?.Home?.Top)) _.set(Settings, "Home.Top", Settings?.Home?.Top ? [Settings.Home.Top] : []);
