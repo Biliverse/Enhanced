@@ -7,7 +7,7 @@ inputs:
     required: true
   node-version:
     description: Node.js version
-    default: latest
+    default: "24"
     required: false
   install-command:
     description: Command used to install dependencies
